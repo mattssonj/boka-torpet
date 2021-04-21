@@ -21,6 +21,10 @@ Basically, to run it:
 
 ## End to end tests
 To perform end-to-end tests we use Cypress. TODO
+This is what im currently working on:
+https://docs.cypress.io/guides/getting-started/writing-your-first-test#Write-your-first-test
+
+To start cypress, run `npx cypress open`
 
 # MVP
 - [x] Show a message
