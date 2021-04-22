@@ -19,22 +19,23 @@ Basically, to run it:
 * Run backend from intellij 
 * Go into terminal and run `npm run watch`
 
-## End to end tests
+## End-to-end tests
 To perform end-to-end tests we use Cypress. TODO
 
 # MVP
 - [x] Show a message
-- [ ] Show a booking
+- [x] Show a booking
 - [ ] Book a day
 - [ ] Edit message
 - [ ] Book an interval
 - [ ] Create new users
 - [ ] Personal info for a user
+- [ ] Show ongoing bookings
 
 # Ideas
-To show the calender this might be of great use:
+To show the calendar this might be of great use:
 https://openbase.com/js/react-big-calendar
 
 # Useful links
 * Kotlin Spring information: https://docs.spring.io/spring-framework/docs/current/reference/html/languages.html
-* How to write end to end tests with cypress: https://docs.cypress.io/guides/getting-started/writing-your-first-test.html#Add-a-test-file
+* How to write end-to-end tests with cypress: https://docs.cypress.io/guides/getting-started/writing-your-first-test.html#Add-a-test-file

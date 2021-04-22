@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Logout from './Logout.js';
 import News from "./news/NewsComponent";
+import Bookings from "./booking/BookingListComponent";
 
 class App extends Component {
 
@@ -12,6 +13,7 @@ class App extends Component {
             <div>
                 <h1>Hello World</h1>
                 <News />
+                <Bookings />
                 <Logout />
             </div>
         )

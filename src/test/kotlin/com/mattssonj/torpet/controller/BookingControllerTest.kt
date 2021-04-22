@@ -1,7 +1,7 @@
 package com.mattssonj.torpet.controller
 
-import com.mattssonj.torpet.business.MessageService
-import com.mattssonj.torpet.persistence.Message
+import com.mattssonj.torpet.business.BookingService
+import com.mattssonj.torpet.persistence.Booking
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,27 +12,28 @@ import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 
-private const val BASE_URL = "/api/messages"
+private const val BASE_URL = "/api/bookings"
 
-@WebMvcTest(MessageController::class)
+@WebMvcTest(BookingController::class)
 @AutoConfigureMockMvc
 @WithMockUser
-internal class MessageControllerTest {
+class BookingControllerTest {
 
     @Autowired
-    lateinit var mockMvc: MockMvc
+    private lateinit var mockMvc: MockMvc
 
     @MockBean
-    lateinit var messageService: MessageService
+    private lateinit var bookingService: BookingService
 
     @Test
-    fun `Get newest message`() {
-        val message = Message(null, "Test")
-        `when`(messageService.getNewestMessage()).thenReturn(message)
+    fun `Get all bookings`() {
+        val booking = Booking(1)
+        `when`(bookingService.getAllBookings()).thenReturn(listOf(booking))
 
-        mockMvc.get("$BASE_URL/newest").andExpect {
+        mockMvc.get(BASE_URL).andExpect {
             status { isOk() }
-            jsonPath("$.message") { value(message.message) }
+            jsonPath("$.[0].id") { value(booking.id) }
         }
     }
+
 }
