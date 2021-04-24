@@ -7,7 +7,7 @@ target/
 
 ## Custom
 # Built and bundled react files
-**/src/main/resources/static/built/*
+src/main/resources/static/built/*
 
 ### STS ###
 .apt_generated
