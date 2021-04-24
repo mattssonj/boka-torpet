@@ -14,7 +14,8 @@ data class Booking(
     @GeneratedValue
     var id: Long? = null,
     var startDate: LocalDate? = null,
-    var endDate: LocalDate? = null
+    var endDate: LocalDate? = null,
+    var booker: String? = null,
 ) {
 
     @CreationTimestamp

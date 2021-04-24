@@ -1,7 +1,6 @@
 package com.mattssonj.torpet.persistence
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -9,8 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 @DataJpaTest
 internal class MessageTest {
 
-    @Autowired
-    lateinit var messageRepository: MessageRepository
+    @Autowired lateinit var messageRepository: MessageRepository
 
     @Test
     fun `Saved entity gets an ID`() {

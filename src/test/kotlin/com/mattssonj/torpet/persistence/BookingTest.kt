@@ -9,8 +9,7 @@ import java.time.LocalDate
 @DataJpaTest
 class BookingTest {
 
-    @Autowired
-    private lateinit var bookingRepository: BookingRepository
+    @Autowired private lateinit var bookingRepository: BookingRepository
 
     @Test
     fun `Inserting two equal bookings creates stores two bookings`() {

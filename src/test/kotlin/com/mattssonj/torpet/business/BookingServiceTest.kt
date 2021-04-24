@@ -3,6 +3,7 @@ package com.mattssonj.torpet.business
 import com.mattssonj.torpet.persistence.Booking
 import com.mattssonj.torpet.persistence.BookingRepository
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -52,6 +53,31 @@ internal class BookingServiceTest {
 
         val bookingService = BookingService(bookingRepository)
         assertThat(bookingService.getAllBookings()).isEmpty()
+    }
+
+    @Test
+    fun `Create new booking`() {
+        val incomingBooking = IncomingBooking(LocalDate.now(), LocalDate.now().plusDays(2), "user")
+
+        val booking = BookingService(bookingRepository).create(incomingBooking)
+
+        assertThat(booking.startDate).isEqualTo(incomingBooking.startDate)
+        assertThat(booking.endDate).isEqualTo(incomingBooking.endDate)
+        assertThat(booking.booker).isEqualTo(incomingBooking.booker)
+    }
+
+    @Test
+    fun `Dont save outdated incoming booking`() {
+        val incomingBooking = IncomingBooking(LocalDate.now().minusDays(2), LocalDate.now(), "user")
+
+        assertThatIllegalArgumentException().isThrownBy { BookingService(bookingRepository).create(incomingBooking) }
+    }
+
+    @Test
+    fun `Dont save when start date is before end date`() {
+        val incomingBooking = IncomingBooking(LocalDate.now(), LocalDate.now().minusDays(3), "user")
+
+        assertThatIllegalArgumentException().isThrownBy { BookingService(bookingRepository).create(incomingBooking) }
     }
 
 }
