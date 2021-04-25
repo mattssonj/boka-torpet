@@ -32,8 +32,8 @@ class DevConfiguration(private val messageRepository: MessageRepository,
     private fun addBookings() {
         val old = Booking(startDate = LocalDate.now().minusMonths(1), endDate = LocalDate.now().minusMonths(1).plusDays(3))
         val current = Booking(startDate = LocalDate.now().minusDays(2), endDate = LocalDate.now().plusDays(1))
-        val upcoming1 = Booking(startDate = LocalDate.now().plusDays(3), endDate = LocalDate.now().plusDays(5))
-        val upcoming2 = Booking(startDate = LocalDate.now().plusDays(4), endDate = LocalDate.now().plusDays(6))
+        val upcoming1 = Booking(startDate = LocalDate.now().plusDays(3), endDate = LocalDate.now().plusDays(5), booker = "Joakim")
+        val upcoming2 = Booking(startDate = LocalDate.now().plusDays(4), endDate = LocalDate.now().plusDays(6), booker = "Joakim")
 
         bookingRepository.save(old)
         bookingRepository.save(current)
