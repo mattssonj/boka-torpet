@@ -1,7 +1,7 @@
 var path = require('path');
 
 module.exports = {
-    entry: './src/main/js/App.js',
+    entry: ['@babel/polyfill', './src/main/js/App.js'],
     cache: true,
     devServer: {
         contentBase: path.join(__dirname, 'src'),
