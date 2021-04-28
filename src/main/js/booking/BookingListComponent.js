@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Axios from "axios";
 
 import BookingListRow from "./BookingListElement";
-import {Col} from "react-bootstrap";
+import {Col, Row} from "react-bootstrap";
 
 const ErrorMessage = 'Kunde inte hämta bokningar.'
 const EmptyMessage = 'Inga bokningar tillgängliga'
@@ -26,6 +26,7 @@ export default function Bookings() {
             {bookings.map(booking => (
                 <div key={booking.id}>
                     <BookingListRow booking={booking}/>
+                    <br />
                 </div>
             ))}
         </Col>

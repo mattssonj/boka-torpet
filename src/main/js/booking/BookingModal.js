@@ -18,10 +18,8 @@ export default function BookingModal({show, hideFunction, bookingComplete}) {
     const resetForm = () => setFormValues(initialFormObject)
 
     const createBooking = async () => {
-        console.log('Booking')
         setIsBooking(true)
         postRequest().then(response => {
-            console.log(response.data)
             setIsBooking(false)
             resetForm()
             bookingComplete(response.data)

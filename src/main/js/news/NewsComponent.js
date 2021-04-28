@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Axios from "axios";
-import {Button, Col, Jumbotron} from "react-bootstrap";
+import {Button, Col, Jumbotron, Row} from "react-bootstrap";
 
 import NewsModal from "./NewsModal";
 import DateFormatter from "../common/DateFormatter";
@@ -38,10 +38,10 @@ export default function News() {
     return (
         <Col>
             <Jumbotron>
-                <h1>Boka torpet</h1>
-                <p>{news.message}</p>
-                <h6>Skrivet {news.written} av {news.writer}</h6>
-                <Button size="sm" variant="info" onClick={() => setShowModal(true)}>Nytt meddelande</Button>
+                <Row><h1>Boka torpet</h1></Row>
+                <Row><p>{news.message}</p></Row>
+                <Row><small>Skrivet {news.written} av {news.writer}</small></Row>
+                <Row><Button size="sm" variant="info" onClick={() => setShowModal(true)}>Nytt meddelande</Button></Row>
                 <NewsModal show={showModal} hideFunction={() => setShowModal(false)} newMessage={modalCreation}/>
             </Jumbotron>
         </Col>

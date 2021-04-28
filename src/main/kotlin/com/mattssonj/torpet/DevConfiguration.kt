@@ -15,8 +15,10 @@ import javax.annotation.PostConstruct
 
 @Component
 @Profile("dev")
-class DevConfiguration(private val messageRepository: MessageRepository,
-                       private val bookingRepository: BookingRepository) {
+class DevConfiguration(
+    private val messageRepository: MessageRepository,
+    private val bookingRepository: BookingRepository
+) {
 
     @PostConstruct
     fun generateDevData() {
@@ -30,10 +32,23 @@ class DevConfiguration(private val messageRepository: MessageRepository,
     }
 
     private fun addBookings() {
-        val old = Booking(startDate = LocalDate.now().minusMonths(1), endDate = LocalDate.now().minusMonths(1).plusDays(3))
+        val old =
+            Booking(startDate = LocalDate.now().minusMonths(1), endDate = LocalDate.now().minusMonths(1).plusDays(3))
         val current = Booking(startDate = LocalDate.now().minusDays(2), endDate = LocalDate.now().plusDays(1))
-        val upcoming1 = Booking(startDate = LocalDate.now().plusDays(3), endDate = LocalDate.now().plusDays(5), booker = "Joakim")
-        val upcoming2 = Booking(startDate = LocalDate.now().plusDays(4), endDate = LocalDate.now().plusDays(6), booker = "Joakim")
+        val upcoming1 = Booking(
+            startDate = LocalDate.now().plusDays(3),
+            endDate = LocalDate.now().plusDays(5),
+            booker = "Joakim",
+            name = "Test bokning 1",
+            message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae tempor ipsum. Proin at eros at turpis euismod bibendum dignissim a metus. Morbi id enim vitae diam ornare condimentum vitae at urna. Donec scelerisque dui quis massa rutrum consectetur."
+        )
+        val upcoming2 = Booking(
+            startDate = LocalDate.now().plusDays(4),
+            endDate = LocalDate.now().plusDays(6),
+            booker = "Joakim",
+            name = "Lorem ipsum",
+            message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae tempor ipsum. Proin at eros at turpis euismod bibendum dignissim a metus. Morbi id enim vitae diam ornare condimentum vitae at urna. Donec scelerisque dui quis massa rutrum consectetur."
+        )
 
         bookingRepository.save(old)
         bookingRepository.save(current)

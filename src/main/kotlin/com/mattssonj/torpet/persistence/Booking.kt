@@ -15,7 +15,9 @@ data class Booking(
     var id: Long? = null,
     var startDate: LocalDate? = null,
     var endDate: LocalDate? = null,
-    var booker: String? = null,
+    var booker: String = "",
+    var name: String = "",
+    var message: String = "",
 ) {
 
     @CreationTimestamp
