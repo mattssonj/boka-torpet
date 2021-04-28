@@ -10,9 +10,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.post
 
 private const val BASE_URL = "/api/messages"
 
@@ -26,7 +29,7 @@ internal class MessageControllerTest {
 
     @Test
     fun `Get newest message`() {
-        val message = Message(null, "Test")
+        val message = Message(null, "Test", "writer")
         every { messageService.getNewestMessage() } returns message
 
         mockMvc.get("$BASE_URL/newest").andExpect {
@@ -34,10 +37,22 @@ internal class MessageControllerTest {
             jsonPath("$.message") { value(message.message) }
         }
     }
+
+    @Test
+    fun `Create new message`() {
+        val message = "message body"
+
+        mockMvc.post(BASE_URL) {
+            with(csrf())
+            contentType = MediaType.APPLICATION_JSON
+            content = "{\"message\": \"$message\"}"
+        }.andExpect {
+            status { isCreated() }
+        }
+    }
 }
 
 @Configuration
 class MessageControllerTestConfiguration {
-    @Bean
-    fun mockMessageService() = mockk<MessageService>(relaxed = true)
+    @Bean fun mockMessageService() = mockk<MessageService>(relaxed = true)
 }

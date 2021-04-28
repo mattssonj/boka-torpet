@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import Axios from "axios";
 
-import generic_styles from "../css/Generics.module.css"
 import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 
 const initialFormObject = {

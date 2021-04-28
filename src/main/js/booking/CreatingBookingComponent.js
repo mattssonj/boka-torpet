@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 
-import generic_styles from "../css/Generics.module.css"
 import {Alert, Button, Col} from "react-bootstrap";
 import BookingModal from "./BookingModal";
 
@@ -26,7 +25,7 @@ export default function CreateBooking() {
                     </Button>
                 </div>
             </Alert>
-            <Button variant="primary" block onClick={() => setShowModal(true)}>Boka</Button>
+            <Button variant="outline-primary" size="lg" block onClick={() => setShowModal(true)}>Boka</Button>
             <BookingModal show={showModal} hideFunction={hideModal} bookingComplete={presentAlert}/>
         </Col>
     );

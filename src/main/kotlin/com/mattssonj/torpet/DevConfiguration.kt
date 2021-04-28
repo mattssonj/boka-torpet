@@ -25,7 +25,7 @@ class DevConfiguration(private val messageRepository: MessageRepository,
     }
 
     private fun addMessage() {
-        val message = Message(message = "Torpet är rent och prydligt. Fortsätta hålla det så!")
+        val message = Message(message = "Torpet är rent och prydligt. Fortsätta hålla det så!", writer = "writer")
         messageRepository.save(message)
     }
 

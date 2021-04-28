@@ -10,6 +10,10 @@ const val DefaultMessage = "No message found"
 class MessageService(private val messageRepository: MessageRepository) {
 
     fun getNewestMessage(): Message {
-        return messageRepository.findFirstByOrderByCreatedTimestampDesc() ?: Message(null, DefaultMessage)
+        return messageRepository.findFirstByOrderByCreatedTimestampDesc() ?: Message(null, DefaultMessage, "BokaTorpet")
+    }
+
+    fun create(message: String, writer: String): Message {
+        return messageRepository.save(Message(message = message, writer = writer))
     }
 }

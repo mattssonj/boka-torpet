@@ -13,12 +13,6 @@ class App extends Component {
     render() {
         return (
             <Container>
-                <Row><Col>
-                    <Jumbotron>
-                        <h1>Boka torpet</h1>
-                        <p>Här kan du boka och se andras bokningar av Torpet</p>
-                    </Jumbotron>
-                </Col></Row>
                 <Row><News/></Row>
                 <Row><CreateBooking/></Row>
                 <Row><Bookings/></Row>

@@ -25,12 +25,13 @@ To perform end-to-end tests we use Cypress. TODO
 # MVP
 - [x] Show a message
 - [x] Show a booking
-- [ ] Book a day
-- [ ] Edit message
-- [ ] Book an interval
+- [x] Book a day
+- [ ] Create/Edit message
+- [x] Book an interval
 - [ ] Create new users
 - [ ] Personal info for a user
 - [ ] Show ongoing bookings
+- [ ] Delete booking
 
 # Ideas
 To show the calendar this might be of great use:

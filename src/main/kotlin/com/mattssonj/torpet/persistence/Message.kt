@@ -12,7 +12,8 @@ data class Message(
     @Id
     @GeneratedValue
     var id: Long? = null,
-    var message: String
+    var message: String,
+    var writer: String
 ) {
 
     @CreationTimestamp
