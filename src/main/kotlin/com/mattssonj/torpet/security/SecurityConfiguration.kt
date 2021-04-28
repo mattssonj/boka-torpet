@@ -5,6 +5,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository
 
 @EnableWebSecurity
 class SecurityConfiguration : WebSecurityConfigurerAdapter() {
@@ -15,6 +16,7 @@ class SecurityConfiguration : WebSecurityConfigurerAdapter() {
             .anyRequest().authenticated()
             .and()
             .csrf().ignoringAntMatchers("/logout") // This is used because the react app needs to post a logout request
+            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // This adds the csrf to header
             .and()
             .formLogin()
             .loginPage("/login").permitAll()

@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import Axios from "axios";
 
+import generic_styles from "../css/Generics.module.css"
+import {Col} from "react-bootstrap";
+
 const ErrorMessage = 'Kunde inte hämta nyheter.'
 
 export default function News() {
@@ -16,9 +19,11 @@ export default function News() {
     });
 
     return (
-        <div>
-            <h1>Senaste nyheterna</h1>
-            <p>{news}</p>
-        </div>
+        <Col>
+            <h1 className={generic_styles.section}>Senaste nyheterna</h1>
+            <div>
+                <p className={generic_styles.message}>{news}</p>
+            </div>
+        </Col>
     );
 }

@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import Axios from "axios";
 
+import generic_styles from "../css/Generics.module.css"
 import BookingListRow from "./BookingListElement";
+import {Col} from "react-bootstrap";
 
 const ErrorMessage = 'Kunde inte hämta bokningar.'
 const EmptyMessage = 'Inga bokningar tillgängliga'
@@ -20,13 +22,13 @@ export default function Bookings() {
     }, []); // The empty array here makes the hook only trigger once
 
     return (
-        <div>
-            <h1>Bokningar</h1>
+        <Col>
+            <h1 className={generic_styles.section}>Bokningar</h1>
             {bookings.map(booking => (
                 <div key={booking.id}>
-                    <BookingListRow booking={booking} />
+                    <BookingListRow booking={booking}/>
                 </div>
             ))}
-        </div>
+        </Col>
     );
 }

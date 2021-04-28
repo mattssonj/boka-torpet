@@ -1,5 +1,6 @@
 package com.mattssonj.torpet.business
 
+import com.mattssonj.torpet.controller.IncomingBooking
 import com.mattssonj.torpet.persistence.Booking
 import com.mattssonj.torpet.persistence.BookingRepository
 import org.springframework.stereotype.Service
@@ -9,9 +10,9 @@ import java.time.LocalDate
 class BookingService(private val bookingRepository: BookingRepository) {
 
     fun getAllBookings(): List<Booking> = bookingRepository.findAllByStartDateIsAfterOrderByStartDate(LocalDate.now().minusDays(1))
-    fun create(incomingBooking: IncomingBooking): Booking {
+    fun create(incomingBooking: IncomingBooking, booker: String): Booking {
         verify(incomingBooking)
-        val booking = Booking(null, incomingBooking.startDate, incomingBooking.endDate, incomingBooking.booker)
+        val booking = Booking(null, incomingBooking.startDate, incomingBooking.endDate, booker)
         return bookingRepository.save(booking)
     }
 
@@ -21,5 +22,3 @@ class BookingService(private val bookingRepository: BookingRepository) {
     }
 
 }
-
-class IncomingBooking(val startDate: LocalDate, val endDate: LocalDate, val booker: String)

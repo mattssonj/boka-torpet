@@ -1,9 +1,7 @@
 package com.mattssonj.torpet.controller
 
 import com.mattssonj.torpet.business.BookingService
-import com.mattssonj.torpet.business.IncomingBooking
 import com.mattssonj.torpet.persistence.Booking
-import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.User
@@ -20,12 +18,12 @@ class BookingController(private val bookingService: BookingService) {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun createNewBooking(
-        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) startDate: LocalDate?,
-        @RequestParam(required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) endDate: LocalDate,
+        @RequestBody incomingBooking: IncomingBooking,
         @AuthenticationPrincipal user: User
     ): Booking {
-        val incomingBooking = IncomingBooking(startDate ?: LocalDate.now(), endDate, user.username)
-        return bookingService.create(incomingBooking)
+        return bookingService.create(incomingBooking, user.username)
     }
 
 }
+
+data class IncomingBooking(val startDate: LocalDate, val endDate: LocalDate, val name: String, val message: String)

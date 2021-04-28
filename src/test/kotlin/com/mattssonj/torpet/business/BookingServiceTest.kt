@@ -1,5 +1,6 @@
 package com.mattssonj.torpet.business
 
+import com.mattssonj.torpet.controller.IncomingBooking
 import com.mattssonj.torpet.persistence.Booking
 import com.mattssonj.torpet.persistence.BookingRepository
 import org.assertj.core.api.Assertions.assertThat
@@ -57,27 +58,28 @@ internal class BookingServiceTest {
 
     @Test
     fun `Create new booking`() {
-        val incomingBooking = IncomingBooking(LocalDate.now(), LocalDate.now().plusDays(2), "user")
+        val incomingBooking = IncomingBooking(LocalDate.now(), LocalDate.now().plusDays(2), "name", "message")
+        val booker = "booker"
 
-        val booking = BookingService(bookingRepository).create(incomingBooking)
+        val booking = BookingService(bookingRepository).create(incomingBooking, booker)
 
         assertThat(booking.startDate).isEqualTo(incomingBooking.startDate)
         assertThat(booking.endDate).isEqualTo(incomingBooking.endDate)
-        assertThat(booking.booker).isEqualTo(incomingBooking.booker)
+        assertThat(booking.booker).isEqualTo(booker)
     }
 
     @Test
     fun `Dont save outdated incoming booking`() {
-        val incomingBooking = IncomingBooking(LocalDate.now().minusDays(2), LocalDate.now(), "user")
+        val incomingBooking = IncomingBooking(LocalDate.now().minusDays(2), LocalDate.now(),  "name", "message")
 
-        assertThatIllegalArgumentException().isThrownBy { BookingService(bookingRepository).create(incomingBooking) }
+        assertThatIllegalArgumentException().isThrownBy { BookingService(bookingRepository).create(incomingBooking, "booker") }
     }
 
     @Test
     fun `Dont save when start date is before end date`() {
-        val incomingBooking = IncomingBooking(LocalDate.now(), LocalDate.now().minusDays(3), "user")
+        val incomingBooking = IncomingBooking(LocalDate.now(), LocalDate.now().minusDays(3), "name", "message")
 
-        assertThatIllegalArgumentException().isThrownBy { BookingService(bookingRepository).create(incomingBooking) }
+        assertThatIllegalArgumentException().isThrownBy { BookingService(bookingRepository).create(incomingBooking, "booker") }
     }
 
 }
