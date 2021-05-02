@@ -7,6 +7,28 @@ To run the site locally we can just run the `mvn spring-boot:run` and access htt
 The current test-user can be found in [SecurityConfiguration](src/main/kotlin/com/mattssonj/torpet/security/SecurityConfiguration.kt).
 As of today this is **user**: user **password**: password
 
+## Security
+For more information on how to configure and handle the UserDetailsService etc see the provided doc below.
+
+[Spring Boot Security Documentation](https://docs.spring.io/spring-security/site/docs/current/reference/html5/#servlet-authentication-jdbc-datasource)
+
+### Database
+To use the `JdbcDaoImpl` there are a couple of tables we need to implement. See docs above for more information.
+```sql
+create table users(
+    username varchar_ignorecase(50) not null primary key,
+    password varchar_ignorecase(500) not null,
+    enabled boolean not null
+);
+
+create table authorities (
+    username varchar_ignorecase(50) not null,
+    authority varchar_ignorecase(50) not null,
+    constraint fk_authorities_users foreign key(username) references users(username)
+);
+create unique index ix_auth_username on authorities (username,authority);
+```
+
 ## Dev mode
 We are able to run the backend and frontend service as two separate services. To do this we can run the backend server
 from Intellij if wanted. This present the frontend project from the index.html file in the resource's folder. However,
@@ -26,7 +48,7 @@ To perform end-to-end tests we use Cypress. TODO
 - [x] Show a message
 - [x] Show a booking
 - [x] Book a day
-- [ ] Create/Edit message
+- [x] Create/Edit message
 - [x] Book an interval
 - [ ] Create new users
 - [ ] Personal info for a user

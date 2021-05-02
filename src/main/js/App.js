@@ -1,29 +1,30 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-import Logout from './Logout.js';
-import News from "./news/NewsComponent";
-import Bookings from "./booking/BookingListComponent";
-import {Col, Container, Jumbotron, Row} from "react-bootstrap";
-import CreateBooking from "./booking/CreatingBookingComponent";
+import {BrowserRouter, Switch, Route} from "react-router-dom";
+import Boka from "./boka/Boka";
+import Admin from "./admin/Admin";
 
 class App extends Component {
 
     render() {
         return (
-            <Container>
-                <Row><News/></Row>
-                <Row><CreateBooking/></Row>
-                <Row><Bookings/></Row>
-                <Row><Col><Logout/></Col></Row>
-            </Container>
+            <Switch>
+                <Route path="/admin">
+                    <Admin/>
+                </Route>
+                <Route path="/">
+                    <Boka/>
+                </Route>
+            </Switch>
         )
     }
 
 }
 
 ReactDOM.render(
-    <App/>,
+    <BrowserRouter>
+        <App/>
+    </BrowserRouter>,
     document.getElementById('react')
 );

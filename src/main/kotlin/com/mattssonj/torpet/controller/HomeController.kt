@@ -21,6 +21,11 @@ class HomeController {
         return if (isAuthenticated(auth)) "redirect:/" else "login"
     }
 
+    @RequestMapping("/admin")
+    fun admin(): String {
+        return "forward:/"
+    }
+
     private fun isAuthenticated(auth: Authentication?): Boolean {
         return if (auth != null && auth.isAuthenticated) {
             logger.info("Logged in as ${(auth.principal as UserDetails).username}")

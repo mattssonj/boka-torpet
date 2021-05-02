@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {Link, useHistory} from "react-router-dom";
 import Axios from "axios";
 import {Button, Col, Jumbotron, Row} from "react-bootstrap";
 
@@ -15,6 +16,7 @@ const InitialNews = {
 
 export default function News() {
 
+    const history = useHistory()
     const [news, setNews] = useState(InitialNews)
     const [showModal, setShowModal] = useState(false)
 
@@ -25,6 +27,10 @@ export default function News() {
     const modalCreation = (data) => {
         setShowModal(false)
         updateNews(data)
+    }
+
+    const goToAdmin = () => {
+        history.push('/admin')
     }
 
     useEffect(() => {
@@ -38,11 +44,23 @@ export default function News() {
     return (
         <Col>
             <Jumbotron>
-                <Row><h1>Boka torpet</h1></Row>
-                <Row><p>{news.message}</p></Row>
-                <Row><small>Skrivet {news.written} av {news.writer}</small></Row>
-                <Row><Button size="sm" variant="info" onClick={() => setShowModal(true)}>Nytt meddelande</Button></Row>
+                <Row><Col><h1>Boka torpet</h1></Col></Row>
+                <Row><Col><p>{news.message}</p></Col></Row>
+                <Row><Col><small>Skrivet {news.written} av {news.writer}</small></Col></Row>
+                <Row>
+                    <Col><Button size="sm" variant="info" onClick={() => setShowModal(true)}>Nytt
+                        meddelande</Button></Col>
+
+
+                    <Col className="text-right">
+                        <Link className="btn btn-outline-dark btn-sm" role="button"
+                                                      to="/admin">Admin</Link>
+                        {/*<Button onClick={goToAdmin}>Admin</Button>*/}
+                    </Col>
+
+                </Row>
                 <NewsModal show={showModal} hideFunction={() => setShowModal(false)} newMessage={modalCreation}/>
+
             </Jumbotron>
         </Col>
     );

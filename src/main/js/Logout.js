@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 export default function Logout() {
     return (
         <div>
+            <br />
             <Button variant="info" onClick={() => {
                 console.log('Starting logout process...')
                 Axios.post('/logout').then(() => {
