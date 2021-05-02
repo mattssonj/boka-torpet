@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
@@ -136,7 +136,7 @@ private fun IncomingNewUser.toJson() = ObjectMapper()
     .registerModule(JavaTimeModule())
     .writeValueAsString(this)
 
-@Configuration
+@TestConfiguration
 class AdminControllerTestConfiguration {
     @Bean fun mockAdminService() = mockk<AdminService>(relaxed = true)
 }
