@@ -50,7 +50,7 @@ To perform end-to-end tests we use Cypress. TODO
 - [x] Book a day
 - [x] Create/Edit message
 - [x] Book an interval
-- [ ] Create new users
+- [x] Create new users
 - [ ] Personal info for a user
 - [ ] Show ongoing bookings
 - [ ] Delete booking
@@ -62,3 +62,4 @@ https://openbase.com/js/react-big-calendar
 # Useful links
 * Kotlin Spring information: https://docs.spring.io/spring-framework/docs/current/reference/html/languages.html
 * How to write end-to-end tests with cypress: https://docs.cypress.io/guides/getting-started/writing-your-first-test.html#Add-a-test-file
+* Toastify https://github.com/fkhadra/react-toastify#readme

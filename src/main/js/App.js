@@ -1,22 +1,31 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {BrowserRouter, Switch, Route} from "react-router-dom";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
 import Boka from "./boka/Boka";
 import Admin from "./admin/Admin";
+import {ToastContainer} from "react-toastify";
+
+import 'react-toastify/dist/ReactToastify.css';
 
 class App extends Component {
 
     render() {
         return (
-            <Switch>
-                <Route path="/admin">
-                    <Admin/>
-                </Route>
-                <Route path="/">
-                    <Boka/>
-                </Route>
-            </Switch>
+            <div>
+                <ToastContainer autoClose={false} newestOnTop={true}/>
+                <Switch>
+
+                    <Route path="/admin">
+                        <Admin/>
+                    </Route>
+
+                    <Route path="/">
+                        <Boka/>
+                    </Route>
+
+                </Switch>
+            </div>
         )
     }
 

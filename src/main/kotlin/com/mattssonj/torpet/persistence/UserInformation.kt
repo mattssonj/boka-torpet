@@ -2,27 +2,21 @@ package com.mattssonj.torpet.persistence
 
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
-import java.time.LocalDate
 import java.time.LocalDateTime
 import javax.persistence.Entity
-import javax.persistence.GeneratedValue
 import javax.persistence.Id
 
 @Entity
-data class Booking(
-    @Id
-    @GeneratedValue
-    var id: Long? = null,
-    var startDate: LocalDate? = null,
-    var endDate: LocalDate? = null,
-    var booker: String = "",
+data class UserInformation(
+    @Id val username: String,
+    val createdBy: String,
+    var email: String = "",
+    var phone: String = "",
     var name: String = "",
-    var message: String = "",
 ) {
 
     @CreationTimestamp
     var createdAt: LocalDateTime = LocalDateTime.now()
     @UpdateTimestamp
     var editedAt: LocalDateTime = LocalDateTime.now()
-
 }

@@ -19,21 +19,21 @@ internal class MessageTest {
     }
 
     @Test
-    fun `Saved entity gets createdTimestamp`() {
+    fun `Saved entity gets created Timestamp`() {
         val message = Message(null, "Hello", "writer")
         val saved = messageRepository.save(message)
 
-        assertThat(saved.createdTimestamp).isNotNull()
+        assertThat(saved.createdAt).isNotNull()
     }
 
     @Test
-    fun `Edited entity gets editedTimestamp`() {
+    fun `Edited entity gets edited Timestamp`() {
         val message = Message(null, "Hello", "writer")
         val saved = messageRepository.save(message)
         val updated = messageRepository.save(saved.apply { this.message = "Bye" })
 
-        assertThat(updated.editedTimestamp).isNotNull()
-        assertThat(updated.editedTimestamp).isNotEqualTo(updated.createdTimestamp)
+        assertThat(updated.editedAt).isNotNull()
+        assertThat(updated.editedAt).isNotEqualTo(updated.createdAt)
     }
 
 }

@@ -3,6 +3,7 @@ package com.mattssonj.torpet.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.mattssonj.torpet.DataSourceMockConfiguration
 import com.mattssonj.torpet.business.AdminService
 import com.mattssonj.torpet.business.UsernameAlreadyExistsException
 import io.mockk.every
@@ -13,21 +14,25 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 
 private const val BASE_URL = "/api/admin"
 
-@WebMvcTest(AdminController::class, AdminControllerTestConfiguration::class)
+@WebMvcTest(AdminController::class)
+@Import(AdminControllerTestConfiguration::class, DataSourceMockConfiguration::class)
 @AutoConfigureMockMvc
 @WithMockUser(roles = ["ADMIN"])
 class AdminControllerTest {
 
     @Autowired
     private lateinit var mockAdminService: AdminService
+
     @Autowired
     private lateinit var mockMvc: MockMvc
 
@@ -129,6 +134,19 @@ class AdminControllerTest {
         }
     }
 
+    @Test
+    fun `Get all registered Users`() {
+        val outgoingUser = OutgoingUser("username", "admin", true)
+        every { mockAdminService.getAllRegisteredUsers(any()) } returns listOf(outgoingUser)
+
+        mockMvc.get("$BASE_URL/users") {
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+            jsonPath("$.[0].username") { value(outgoingUser.username) }
+        }
+    }
+
 }
 
 private fun IncomingNewUser.toJson() = ObjectMapper()
@@ -136,7 +154,8 @@ private fun IncomingNewUser.toJson() = ObjectMapper()
     .registerModule(JavaTimeModule())
     .writeValueAsString(this)
 
+
 @TestConfiguration
 class AdminControllerTestConfiguration {
-    @Bean fun mockAdminService() = mockk<AdminService>(relaxed = true)
+    @Bean fun mockAdminService(): AdminService = mockk(relaxed = true)
 }

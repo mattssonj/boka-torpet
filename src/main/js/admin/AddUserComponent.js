@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Col, Form, Row} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Axios from "axios";
+import {success, warning} from "../Toaster";
 
 const initialFormValues = {
     username: '',
@@ -16,14 +17,10 @@ export default function AddUserComponent() {
     const createUser = () => {
         if (addUserForm.username === '' || addUserForm.password === '') return
         Axios.post("/api/admin/users", addUserForm).then(response => {
-            console.log('User added')
-            console.log(response)
+            success("Användare: " + addUserForm.username + ' skapad')
             clearForm()
-            // TODO Handle this nicely
         }).catch(error => {
-            console.log('Error')
-            console.log(error)
-            // TODO Handle error
+            warning("Något gick fel: " + error.response.data.message)
         })
     }
 

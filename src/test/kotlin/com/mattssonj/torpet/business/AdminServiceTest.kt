@@ -1,6 +1,7 @@
 package com.mattssonj.torpet.business
 
 import com.mattssonj.torpet.controller.IncomingNewUser
+import com.mattssonj.torpet.persistence.UserInformationRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -18,11 +19,13 @@ private const val USERNAME = "newuser"
 internal class AdminServiceTest {
 
     @Autowired lateinit var userDetailsManager: UserDetailsManager
+    @Autowired lateinit var userInformationRepository: UserInformationRepository
     @Autowired lateinit var sut: AdminService
 
     @BeforeEach
     fun prepare() {
         userDetailsManager.deleteUser(USERNAME)
+        userInformationRepository.deleteAll()
     }
 
     @Test
@@ -32,6 +35,15 @@ internal class AdminServiceTest {
         sut.createUser(incomingNewUser, ADMIN)
 
         assertThat(userDetailsManager.userExists(incomingNewUser.username))
+    }
+
+    @Test
+    fun `Created user got empty user information`() {
+        val incomingNewUser = IncomingNewUser(USERNAME, "password")
+
+        sut.createUser(incomingNewUser, ADMIN)
+
+        assertThat(userInformationRepository.findById(incomingNewUser.username)).isNotEmpty
     }
 
     @ParameterizedTest
@@ -64,6 +76,37 @@ internal class AdminServiceTest {
         val incomingNewUser = IncomingNewUser(USERNAME, badPassword)
 
         assertThrows<IllegalArgumentException> { sut.createUser(incomingNewUser, ADMIN) }
+    }
+
+    @Test
+    fun `Get all registered users`() {
+        val incomingNewUser = IncomingNewUser(USERNAME, "password")
+        sut.createUser(incomingNewUser, ADMIN)
+
+        val registeredUsers = sut.getAllRegisteredUsers(ADMIN)
+
+        assertThat(registeredUsers).hasSize(1)
+        assertThat(registeredUsers.first().username).isEqualTo(USERNAME)
+    }
+
+    @Test
+    fun `Able to delete users that specific admin created`() {
+        val incomingNewUser = IncomingNewUser(USERNAME, "password")
+        sut.createUser(incomingNewUser, ADMIN)
+
+        val registeredUser = sut.getAllRegisteredUsers(ADMIN).first()
+
+        assertThat(registeredUser.ableToDelete).isTrue
+    }
+
+    @Test
+    fun `Able to delete is false for other admins`() {
+        val incomingNewUser = IncomingNewUser(USERNAME, "password")
+        sut.createUser(incomingNewUser, ADMIN)
+
+        val registeredUser = sut.getAllRegisteredUsers("OtherAdmin").first()
+
+        assertThat(registeredUser.ableToDelete).isFalse
     }
 
 }

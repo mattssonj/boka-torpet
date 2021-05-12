@@ -1,10 +1,15 @@
 package com.mattssonj.torpet
 
+import com.mattssonj.torpet.business.AdminService
+import com.mattssonj.torpet.controller.IncomingNewUser
 import com.mattssonj.torpet.persistence.Booking
 import com.mattssonj.torpet.persistence.BookingRepository
 import com.mattssonj.torpet.persistence.Message
 import com.mattssonj.torpet.persistence.MessageRepository
+import com.mattssonj.torpet.security.Roles
 import org.springframework.context.annotation.Profile
+import org.springframework.security.core.userdetails.User
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import javax.annotation.PostConstruct
@@ -17,13 +22,15 @@ import javax.annotation.PostConstruct
 @Profile("dev")
 class DevConfiguration(
     private val messageRepository: MessageRepository,
-    private val bookingRepository: BookingRepository
+    private val bookingRepository: BookingRepository,
+    private val adminService: AdminService,
 ) {
 
     @PostConstruct
     fun generateDevData() {
         addMessage()
         addBookings()
+        addUsers()
     }
 
     private fun addMessage() {
@@ -55,4 +62,12 @@ class DevConfiguration(
         bookingRepository.save(upcoming1)
         bookingRepository.save(upcoming2)
     }
+
+    private fun addUsers() {
+        adminService.createUser(IncomingNewUser("TestUser1", "password"), "Developer")
+        adminService.createUser(IncomingNewUser("TestUser2", "password"), "Developer")
+        adminService.createUser(IncomingNewUser("TestUser3", "password"), "Developer")
+        adminService.createUser(IncomingNewUser("utanadmin", "password"), "Developer")
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.mattssonj.torpet.controller
 
+import com.mattssonj.torpet.DataSourceMockConfiguration
 import com.mattssonj.torpet.business.MessageService
 import com.mattssonj.torpet.persistence.Message
 import io.mockk.every
@@ -11,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
@@ -20,9 +22,10 @@ import org.springframework.test.web.servlet.post
 
 private const val BASE_URL = "/api/messages"
 
-@WebMvcTest(MessageController::class, MessageControllerTestConfiguration::class)
+@WebMvcTest(MessageController::class)
 @AutoConfigureMockMvc
 @WithMockUser
+@Import(MessageControllerTestConfiguration::class, DataSourceMockConfiguration::class)
 internal class MessageControllerTest {
 
     @Autowired lateinit var mockMvc: MockMvc

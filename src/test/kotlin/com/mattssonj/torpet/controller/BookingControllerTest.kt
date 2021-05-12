@@ -3,6 +3,7 @@ package com.mattssonj.torpet.controller
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.mattssonj.torpet.DataSourceMockConfiguration
 import com.mattssonj.torpet.business.BookingService
 import com.mattssonj.torpet.persistence.Booking
 import io.mockk.every
@@ -16,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
@@ -26,9 +28,10 @@ import java.time.LocalDate
 
 private const val BASE_URL = "/api/bookings"
 
-@WebMvcTest(BookingController::class, BookingControllerTestConfiguration::class)
+@WebMvcTest(BookingController::class)
 @AutoConfigureMockMvc
 @WithMockUser
+@Import(BookingControllerTestConfiguration::class, DataSourceMockConfiguration::class)
 class BookingControllerTest {
 
     @Autowired private lateinit var mockBookingService: BookingService

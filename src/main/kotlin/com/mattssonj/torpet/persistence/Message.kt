@@ -17,8 +17,8 @@ data class Message(
 ) {
 
     @CreationTimestamp
-    var createdTimestamp: LocalDateTime = LocalDateTime.now()
+    var createdAt: LocalDateTime = LocalDateTime.now()
     @UpdateTimestamp
-    var editedTimestamp: LocalDateTime = LocalDateTime.now()
+    var editedAt: LocalDateTime = LocalDateTime.now()
 
 }

@@ -21,7 +21,7 @@ export default function News() {
     const [showModal, setShowModal] = useState(false)
 
     const updateNews = (data) => {
-        setNews({message: data.message, writer: data.writer, written: DateFormatter(data.createdTimestamp)})
+        setNews({message: data.message, writer: data.writer, written: DateFormatter(data.createdAt)})
     }
 
     const modalCreation = (data) => {
@@ -48,19 +48,15 @@ export default function News() {
                 <Row><Col><p>{news.message}</p></Col></Row>
                 <Row><Col><small>Skrivet {news.written} av {news.writer}</small></Col></Row>
                 <Row>
-                    <Col><Button size="sm" variant="info" onClick={() => setShowModal(true)}>Nytt
-                        meddelande</Button></Col>
+                    <Col><Button size="sm" variant="info" onClick={() => setShowModal(true)}>Nytt meddelande</Button></Col>
 
 
                     <Col className="text-right">
-                        <Link className="btn btn-outline-dark btn-sm" role="button"
-                                                      to="/admin">Admin</Link>
-                        {/*<Button onClick={goToAdmin}>Admin</Button>*/}
+                        <Link className="btn btn-outline-dark btn-sm" role="button" to="/admin">Admin</Link>
                     </Col>
 
                 </Row>
                 <NewsModal show={showModal} hideFunction={() => setShowModal(false)} newMessage={modalCreation}/>
-
             </Jumbotron>
         </Col>
     );
