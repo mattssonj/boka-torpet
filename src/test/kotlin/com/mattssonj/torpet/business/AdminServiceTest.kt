@@ -1,6 +1,7 @@
 package com.mattssonj.torpet.business
 
 import com.mattssonj.torpet.controller.IncomingNewUser
+import com.mattssonj.torpet.controller.UsernameAlreadyExistsException
 import com.mattssonj.torpet.persistence.UserInformationRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
