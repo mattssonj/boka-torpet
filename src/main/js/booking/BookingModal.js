@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import Axios from "axios";
 
 import {Button, Col, Form, Modal, Row} from "react-bootstrap";
+import {toaster} from "../common/Toaster";
 
 const initialFormObject = {
     name: 'testing',
@@ -10,7 +11,7 @@ const initialFormObject = {
     endDate: '2021-12-13'
 }
 
-export default function BookingModal({show, hideFunction, bookingComplete}) {
+export default function BookingModal({show, hideFunction}) {
 
     const [isBooking, setIsBooking] = useState(false)
     const [formValues, setFormValues] = useState(initialFormObject)
@@ -22,11 +23,12 @@ export default function BookingModal({show, hideFunction, bookingComplete}) {
         postRequest().then(response => {
             setIsBooking(false)
             resetForm()
-            bookingComplete(response.data)
-        }).catch(error => {
-            console.log(error.response)
+            toaster.success(`Bokning "${response.data.name}" skapad`)
+            hideFunction()
+        }).catch(errorResp => {
+            console.log(errorResp.response)
             setIsBooking(false)
-            // TODO add some error messaging here
+            toaster.error('Något gick fel när du försökte spara bokningen: ' + errorResp.response.data.message)
         })
     }
 
@@ -72,7 +74,7 @@ export default function BookingModal({show, hideFunction, bookingComplete}) {
             <Modal.Footer>
                 <Button variant="secondary" onClick={hideFunction}>Stäng</Button>
                 <Button variant="primary" onClick={!isBooking ? createBooking : null}
-                        disabled={isBooking}>{isBooking ? 'Bokar...' : 'Boka'}</Button>
+                        disabled={isBooking}>{isBooking ? 'Bokar...' : 'Home'}</Button>
             </Modal.Footer>
         </Modal>
     );

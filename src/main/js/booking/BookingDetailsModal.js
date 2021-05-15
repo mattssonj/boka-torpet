@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Axios from "axios";
 
 import {Button, Form, Modal} from "react-bootstrap";
-import {error} from "../../Toaster";
+import {toaster} from "../common/Toaster";
 
 const initialInformation = {
     name: '',
@@ -24,7 +24,7 @@ export default function BookingDetailsModal({show, hideFunction, booking}) {
                 setUserInformation(response.data)
             }).catch(response => {
             console.log(response.response)
-            error('Fel när kontaktuppgifter skulle hämtas: ' + response.response.data.message)
+            toaster.error('Fel när kontaktuppgifter skulle hämtas: ' + response.response.data.message)
         })
     }
 

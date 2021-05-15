@@ -5,7 +5,7 @@ import {Button, Col, Jumbotron, Row} from "react-bootstrap";
 
 import NewsModal from "./NewsModal";
 import DateFormatter from "../common/DateFormatter";
-import ChangeUserInformationComponent from "../../user/ChangeUserInformationComponent";
+import ChangeUserInformationComponent from "../user/ChangeUserInformationComponent";
 
 const ErrorMessage = 'Kunde inte hämta nyheter.'
 

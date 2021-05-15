@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter, Route, Switch} from "react-router-dom";
-import Boka from "./boka/Boka";
+import Home from "./Home";
 import Admin from "./admin/Admin";
 import {ToastContainer} from "react-toastify";
 
@@ -21,7 +21,7 @@ class App extends Component {
                     </Route>
 
                     <Route path="/">
-                        <Boka/>
+                        <Home/>
                     </Route>
 
                 </Switch>

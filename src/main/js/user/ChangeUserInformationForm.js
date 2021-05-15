@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Axios from "axios";
 
 import {Button, Form, Modal} from "react-bootstrap";
-import {error, success} from "../Toaster";
+import {toaster} from "../common/Toaster";
 
 const initialFormObject = {
     name: '',
@@ -25,7 +25,7 @@ export default function ChangeUserInformationForm({show, hideFunction}) {
             .then(response => {
                 setIsSaving(false)
                 setUserInformation(response.data)
-                success('Användaruppgifter sparade')
+                toaster.success('Användaruppgifter sparade')
                 hideFunction()
             }).catch(error => {
             console.log(error.response)
@@ -39,7 +39,7 @@ export default function ChangeUserInformationForm({show, hideFunction}) {
                 setUserInformation(response.data)
             }).catch(response => {
             console.log(response.response)
-            error('Fel när kontaktuppgifter skulle hämtas: ' + response.response.data.message)
+            toaster.error('Fel när kontaktuppgifter skulle hämtas: ' + response.response.data.message)
         })
     }
 
@@ -54,17 +54,20 @@ export default function ChangeUserInformationForm({show, hideFunction}) {
                     </Form.Text>
                     <Form.Group controlId="name">
                         <Form.Label>Namn</Form.Label>
-                        <Form.Control type="text" onChange={e => setUserInformation({...userInformation, name: e.target.value})}
+                        <Form.Control type="text"
+                                      onChange={e => setUserInformation({...userInformation, name: e.target.value})}
                                       value={userInformation.name}/>
                     </Form.Group>
                     <Form.Group controlId="phone">
                         <Form.Label>Telefon</Form.Label>
-                        <Form.Control type="text" onChange={e => setUserInformation({...userInformation, phone: e.target.value})}
+                        <Form.Control type="text"
+                                      onChange={e => setUserInformation({...userInformation, phone: e.target.value})}
                                       value={userInformation.phone}/>
                     </Form.Group>
                     <Form.Group controlId="email">
                         <Form.Label>E-post</Form.Label>
-                        <Form.Control type="email" onChange={e => setUserInformation({...userInformation, email: e.target.value})}
+                        <Form.Control type="email"
+                                      onChange={e => setUserInformation({...userInformation, email: e.target.value})}
                                       value={userInformation.email}/>
                     </Form.Group>
                 </Form>

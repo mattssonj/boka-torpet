@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useHistory} from "react-router-dom";
 import {Button, Col, ListGroup, Row, Tab} from "react-bootstrap";
-import {error as errorToaster} from '../Toaster'
+import {toaster} from '../common/Toaster'
 import Axios from "axios";
 import UserInformationComponent from "../user/UserInformationComponent";
 
@@ -27,12 +27,12 @@ export default function UserListComponent(showAll) {
                 if (error.response.status === FORBIDDEN)
                     handleForbidden()
                 else
-                    errorToaster(errorMessage + error.response.data.message)
+                    toaster.error(errorMessage + error.response.data.message)
             })
     };
 
     const handleForbidden = () => {
-        errorToaster(forbiddenMessage);
+        toaster.error(forbiddenMessage);
         history.push("/")
     }
 
