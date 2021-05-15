@@ -5,6 +5,7 @@ import {Button, Col, Jumbotron, Row} from "react-bootstrap";
 
 import NewsModal from "./NewsModal";
 import DateFormatter from "../common/DateFormatter";
+import ChangeUserInformationComponent from "../../user/ChangeUserInformationComponent";
 
 const ErrorMessage = 'Kunde inte hämta nyheter.'
 
@@ -48,13 +49,15 @@ export default function News() {
                 <Row><Col><p>{news.message}</p></Col></Row>
                 <Row><Col><small>Skrivet {news.written} av {news.writer}</small></Col></Row>
                 <Row>
-                    <Col><Button size="sm" variant="info" onClick={() => setShowModal(true)}>Nytt meddelande</Button></Col>
-
-
+                    <Col>
+                        <Button size="sm" variant="info" onClick={() => setShowModal(true)}>Nytt meddelande</Button>
+                    </Col>
+                    <Col className="text-center">
+                        <ChangeUserInformationComponent/>
+                    </Col>
                     <Col className="text-right">
                         <Link className="btn btn-outline-dark btn-sm" role="button" to="/admin">Admin</Link>
                     </Col>
-
                 </Row>
                 <NewsModal show={showModal} hideFunction={() => setShowModal(false)} newMessage={modalCreation}/>
             </Jumbotron>

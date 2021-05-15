@@ -1,11 +1,8 @@
 package com.mattssonj.torpet.controller
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.mattssonj.torpet.DataSourceMockConfiguration
 import com.mattssonj.torpet.business.AdminService
-import com.mattssonj.torpet.business.UsernameAlreadyExistsException
+import com.mattssonj.torpet.toJson
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Test
@@ -148,12 +145,6 @@ class AdminControllerTest {
     }
 
 }
-
-private fun IncomingNewUser.toJson() = ObjectMapper()
-    .registerKotlinModule()
-    .registerModule(JavaTimeModule())
-    .writeValueAsString(this)
-
 
 @TestConfiguration
 class AdminControllerTestConfiguration {

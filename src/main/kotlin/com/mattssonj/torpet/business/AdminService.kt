@@ -2,35 +2,32 @@ package com.mattssonj.torpet.business
 
 import com.mattssonj.torpet.controller.IncomingNewUser
 import com.mattssonj.torpet.controller.OutgoingUser
+import com.mattssonj.torpet.controller.UsernameAlreadyExistsException
 import com.mattssonj.torpet.persistence.UserInformation
 import com.mattssonj.torpet.persistence.UserInformationRepository
 import com.mattssonj.torpet.security.Roles
 import com.mattssonj.torpet.security.encode
 import org.springframework.security.core.userdetails.User
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.provisioning.UserDetailsManager
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 const val MIN_PASSWORD_SIZE = 6
 
 @Service
 class AdminService(
     private val userDetailsManager: UserDetailsManager,
-    private val userInformationRepository: UserInformationRepository,
+    private val userService: UserService,
 ) {
 
-    @Transactional
     fun createUser(incomingNewUser: IncomingNewUser, admin: String): NewUser {
         verify(incomingNewUser)
         addUser(incomingNewUser)
-        addUserInformation(incomingNewUser.username, admin)
+        userService.createUserInformation(incomingNewUser.username, admin)
         return incomingNewUser.username
     }
 
-    @Transactional
     fun getAllRegisteredUsers(admin: String): List<OutgoingUser> {
-        return userInformationRepository.findAll()
+        return userService.getAllUserInformation()
             .map { OutgoingUser(it.username, it.createdBy, admin.equals(it.createdBy, true)) }
     }
 
@@ -53,14 +50,6 @@ class AdminService(
         userDetailsManager.createUser(newUser)
     }
 
-    private fun addUserInformation(username: String, admin: String) {
-        val userInformation = UserInformation(username, admin)
-        userInformationRepository.save(userInformation)
-    }
-
 }
 
 typealias NewUser = String
-
-class UsernameAlreadyExistsException(username: String) :
-    RuntimeException("A User with username $username already exists")

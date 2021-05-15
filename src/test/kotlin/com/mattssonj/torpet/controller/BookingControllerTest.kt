@@ -1,11 +1,9 @@
 package com.mattssonj.torpet.controller
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.mattssonj.torpet.DataSourceMockConfiguration
 import com.mattssonj.torpet.business.BookingService
 import com.mattssonj.torpet.persistence.Booking
+import com.mattssonj.torpet.toJson
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -16,7 +14,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
@@ -84,11 +81,6 @@ class BookingControllerTest {
     }
 
 }
-
-private fun IncomingBooking.toJson() = ObjectMapper()
-    .registerKotlinModule()
-    .registerModule(JavaTimeModule())
-    .writeValueAsString(this)
 
 @TestConfiguration
 class BookingControllerTestConfiguration {
