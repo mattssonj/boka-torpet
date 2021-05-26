@@ -1,6 +1,8 @@
 package com.mattssonj.torpet.business
 
+import com.mattssonj.torpet.controller.ForbiddenOperationException
 import com.mattssonj.torpet.controller.IncomingBooking
+import com.mattssonj.torpet.controller.NoDataFoundException
 import com.mattssonj.torpet.persistence.Booking
 import com.mattssonj.torpet.persistence.BookingRepository
 import org.springframework.stereotype.Service
@@ -25,6 +27,20 @@ class BookingService(private val bookingRepository: BookingRepository) {
         )
 
         return bookingRepository.save(booking)
+    }
+
+    fun update(id: Long, incomingBooking: IncomingBooking, booker: String): Booking {
+        verify(incomingBooking)
+        val current = bookingRepository.findById(id)
+            .orElseThrow { NoDataFoundException("Unable to find Booking with id = $id") }
+        if (current.booker != booker) throw ForbiddenOperationException("$booker is not allowed to update booking $id")
+        val updated = current.apply {
+            startDate = incomingBooking.startDate
+            endDate = incomingBooking.endDate
+            name = incomingBooking.name
+            message = incomingBooking.message
+        }
+        return bookingRepository.save(updated)
     }
 
     private fun verify(incomingBooking: IncomingBooking) {

@@ -1,30 +1,19 @@
-import React, {useState} from 'react';
-import Axios from "axios";
-
-import {Button, Col, Form, Modal, Row} from "react-bootstrap";
+import React, {useState} from "react";
 import {toaster} from "../common/Toaster";
+import Axios from "axios";
+import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 
-const initialFormObject = {
-    name: 'testing',
-    message: 'message',
-    startDate: '2021-12-12',
-    endDate: '2021-12-13'
-}
-
-export default function BookingModal({show, hideFunction}) {
+export default function EditBookingModal({show, hideFunction, booking}) {
 
     const [isBooking, setIsBooking] = useState(false)
-    const [formValues, setFormValues] = useState(initialFormObject)
+    const [formValues, setFormValues] = useState(booking)
 
-    const resetForm = () => setFormValues(initialFormObject)
-
-    const createBooking = async () => {
+    const updateBooking = async () => {
         setIsBooking(true)
-        postRequest().then(response => {
+        putRequest().then(response => {
             setIsBooking(false)
-            resetForm()
-            toaster.success(`Bokning "${response.data.name}" skapad`)
-            hideFunction()
+            setFormValues(response.data)
+            toaster.success(`Bokning "${response.data.name}" uppdaterad. Glöm inte att uppdatera listan över bokningar när du går tillbaka`)
         }).catch(errorResp => {
             console.log(errorResp.response)
             setIsBooking(false)
@@ -32,8 +21,8 @@ export default function BookingModal({show, hideFunction}) {
         })
     }
 
-    const postRequest = async () => {
-        return Axios.post('/api/bookings', formValues)
+    const putRequest = async () => {
+        return Axios.put('/api/bookings/' + formValues.id, formValues)
     }
 
     return (
@@ -43,14 +32,16 @@ export default function BookingModal({show, hideFunction}) {
                 <Form>
                     <Form.Group controlId="bookingName">
                         <Form.Label>Bokningsnamn</Form.Label>
-                        <Form.Control type="text" onChange={e => setFormValues({...formValues, name: e.target.value})} value={formValues.name} />
+                        <Form.Control type="text" onChange={e => setFormValues({...formValues, name: e.target.value})}
+                                      value={formValues.name}/>
                         <Form.Text className="text-muted">
                             Namnet skulle kunna beskriva bokning, Ex. Midsommarfest eller liknande.
                         </Form.Text>
                     </Form.Group>
                     <Form.Group controlId="bookingMessage">
                         <Form.Label>Bokningsmeddelande</Form.Label>
-                        <Form.Control type="text" onChange={e => setFormValues({...formValues, message: e.target.value})} value={formValues.message} placeholder="Namn på bokning" />
+                        <Form.Control type="text" onChange={e => setFormValues({...formValues, message: e.target.value})}
+                                      value={formValues.message} placeholder="Namn på bokning"/>
                         <Form.Text className="text-muted">
                             En text som förklarar vad som ev. ska hända, Ex. "Vi är 10 pers som ska ha fest"
                         </Form.Text>
@@ -59,13 +50,15 @@ export default function BookingModal({show, hideFunction}) {
                         <Col>
                             <Form.Group controlId="bookingStartDate">
                                 <Form.Label>Start</Form.Label>
-                                <Form.Control type="date" onChange={e => setFormValues({...formValues, startDate: e.target.value})} value={formValues.startDate} />
+                                <Form.Control type="date" onChange={e => setFormValues({...formValues, startDate: e.target.value})}
+                                              value={formValues.startDate}/>
                             </Form.Group>
                         </Col>
                         <Col>
                             <Form.Group controlId="bookingEndDate">
                                 <Form.Label>Slut</Form.Label>
-                                <Form.Control type="date" onChange={e => setFormValues({...formValues, endDate: e.target.value})} value={formValues.endDate} />
+                                <Form.Control type="date" onChange={e => setFormValues({...formValues, endDate: e.target.value})}
+                                              value={formValues.endDate}/>
                             </Form.Group>
                         </Col>
                     </Row>
@@ -73,8 +66,8 @@ export default function BookingModal({show, hideFunction}) {
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={hideFunction}>Stäng</Button>
-                <Button variant="primary" onClick={!isBooking ? createBooking : null}
-                        disabled={isBooking}>{isBooking ? 'Bokar...' : 'Boka'}</Button>
+                <Button variant="primary" onClick={!isBooking ? updateBooking : null}
+                        disabled={isBooking}>{isBooking ? 'Uppdaterar...' : 'Spara'}</Button>
             </Modal.Footer>
         </Modal>
     );

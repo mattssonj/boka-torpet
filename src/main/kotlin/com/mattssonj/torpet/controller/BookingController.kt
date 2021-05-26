@@ -24,6 +24,16 @@ class BookingController(private val bookingService: BookingService) {
         return bookingService.create(incomingBooking, user.username)
     }
 
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    fun updateBooking(
+        @PathVariable id: Long,
+        @RequestBody incomingBooking: IncomingBooking,
+        @AuthenticationPrincipal user: User
+    ): Booking {
+       return bookingService.update(id, incomingBooking, user.username)
+    }
+
 }
 
 data class IncomingBooking(val startDate: LocalDate, val endDate: LocalDate, val name: String, val message: String)

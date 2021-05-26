@@ -21,6 +21,7 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
+import org.springframework.test.web.servlet.put
 import java.time.LocalDate
 
 private const val BASE_URL = "/api/bookings"
@@ -77,6 +78,40 @@ class BookingControllerTest {
             content = incomingBooking.toJson()
         }.andExpect {
             status { isBadRequest() }
+        }
+    }
+
+    @Test
+    fun `Update booking`() {
+        val incomingBooking = IncomingBooking(LocalDate.now(), LocalDate.now().plusDays(2), "name", "message")
+        val idToBeUpdated = 1L
+
+        every { mockBookingService.update(idToBeUpdated, incomingBooking, any()) } returns mockk(relaxed = true)
+
+        mockMvc.put("$BASE_URL/$idToBeUpdated") {
+            with(csrf())
+            accept = MediaType.APPLICATION_JSON
+            contentType = MediaType.APPLICATION_JSON
+            content = incomingBooking.toJson()
+        }.andExpect {
+            status { isOk() }
+        }
+    }
+
+    @Test
+    fun `Update booking that belongs to someone else returns 403`() {
+        val incomingBooking = IncomingBooking(LocalDate.now(), LocalDate.now().plusDays(2), "name", "message")
+        val idToBeUpdated = 1L
+
+        every { mockBookingService.update(any(), any(), any()) } throws ForbiddenOperationException("")
+
+        mockMvc.put("$BASE_URL/$idToBeUpdated") {
+            with(csrf())
+            accept = MediaType.APPLICATION_JSON
+            contentType = MediaType.APPLICATION_JSON
+            content = incomingBooking.toJson()
+        }.andExpect {
+            status { isForbidden() }
         }
     }
 
