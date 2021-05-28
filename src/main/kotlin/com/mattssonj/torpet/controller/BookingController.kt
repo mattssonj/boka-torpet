@@ -31,7 +31,16 @@ class BookingController(private val bookingService: BookingService) {
         @RequestBody incomingBooking: IncomingBooking,
         @AuthenticationPrincipal user: User
     ): Booking {
-       return bookingService.update(id, incomingBooking, user.username)
+        return bookingService.update(id, incomingBooking, user.username)
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteBooking(
+        @PathVariable id: Long,
+        @AuthenticationPrincipal user: User
+    ) {
+        bookingService.delete(id, user.username)
     }
 
 }

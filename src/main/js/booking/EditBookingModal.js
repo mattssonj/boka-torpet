@@ -3,26 +3,45 @@ import {toaster} from "../common/Toaster";
 import Axios from "axios";
 import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 
+const emptyForm = {
+    name: '',
+    message: '',
+    startDate: '',
+    endDate: ''
+}
+
 export default function EditBookingModal({show, hideFunction, booking}) {
 
     const [isBooking, setIsBooking] = useState(false)
     const [formValues, setFormValues] = useState(booking)
 
+
+
     const updateBooking = async () => {
         setIsBooking(true)
-        putRequest().then(response => {
-            setIsBooking(false)
+        await Axios.put('/api/bookings/' + formValues.id, formValues).then(response => {
             setFormValues(response.data)
-            toaster.success(`Bokning "${response.data.name}" uppdaterad. Glöm inte att uppdatera listan över bokningar när du går tillbaka`)
-        }).catch(errorResp => {
-            console.log(errorResp.response)
-            setIsBooking(false)
-            toaster.error('Något gick fel när du försökte spara bokningen: ' + errorResp.response.data.message)
+            hideFunction()
+            toaster.success(`Bokning "${response.data.name}" uppdaterad. Glöm inte att uppdatera listan över bokningar`)
+        }).catch(error => {
+            console.log(error.response)
+            toaster.error('Något gick fel när du försökte spara bokningen: ' + error.response.data.message)
         })
+        setIsBooking(false)
     }
 
-    const putRequest = async () => {
-        return Axios.put('/api/bookings/' + formValues.id, formValues)
+    const deleteBooking = async () => {
+        console.log('Deleting Booking with Id ' + formValues.id)
+        setIsBooking(true)
+        await Axios.delete('/api/bookings/' + formValues.id)
+            .then(response => {
+                toaster.success(`Bokning "${formValues.name}" borttagen`)
+                setFormValues(emptyForm)
+                hideFunction()
+            }).catch(error => {
+                toaster.error('Någon gick fel när du försökte ta bort bokningen: ' + error.response.data.message)
+        })
+        setIsBooking(false)
     }
 
     return (
@@ -64,10 +83,13 @@ export default function EditBookingModal({show, hideFunction, booking}) {
                     </Row>
                 </Form>
             </Modal.Body>
-            <Modal.Footer>
+            <Modal.Footer className="justify-content-between">
+                <Button variant="danger" className="float-left" onClick={!isBooking ? deleteBooking : null} disabled={isBooking}>Tar bort direkt</Button>
+                <div>
                 <Button variant="secondary" onClick={hideFunction}>Stäng</Button>
-                <Button variant="primary" onClick={!isBooking ? updateBooking : null}
+                <Button variant="primary" className="ml-1" onClick={!isBooking ? updateBooking : null}
                         disabled={isBooking}>{isBooking ? 'Uppdaterar...' : 'Spara'}</Button>
+                </div>
             </Modal.Footer>
         </Modal>
     );

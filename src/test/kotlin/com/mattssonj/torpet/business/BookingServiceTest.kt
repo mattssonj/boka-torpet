@@ -2,6 +2,7 @@ package com.mattssonj.torpet.business
 
 import com.mattssonj.torpet.controller.ForbiddenOperationException
 import com.mattssonj.torpet.controller.IncomingBooking
+import com.mattssonj.torpet.controller.NoDataFoundException
 import com.mattssonj.torpet.persistence.Booking
 import com.mattssonj.torpet.persistence.BookingRepository
 import org.assertj.core.api.Assertions.assertThat
@@ -110,6 +111,15 @@ internal class BookingServiceTest {
     }
 
     @Test
+    fun `Update booking throws no data found if booking with provided id was not found`() {
+        val incomingBooking = IncomingBooking(LocalDate.now(), LocalDate.now().plusDays(2), "name", "message")
+
+        val bookingService = BookingService(bookingRepository)
+
+        assertThrows<NoDataFoundException> { bookingService.update(1, incomingBooking, "booker") }
+    }
+
+    @Test
     fun `Update booking throws forbidden operation if other then booker tries to update booking`() {
         val booking = bookingRepository.save(Booking(null, LocalDate.now(), LocalDate.now(), "booker"))
         val incomingBooking = IncomingBooking(LocalDate.now(), LocalDate.now().plusDays(2), "name", "message")
@@ -119,6 +129,33 @@ internal class BookingServiceTest {
         assertThrows<ForbiddenOperationException> {
             bookingService.update(booking.id!!, incomingBooking, "other booker")
         }
+    }
+
+    @Test
+    fun `Delete booking deletes entity with provided id`() {
+        val booking = bookingRepository.save(Booking(null, LocalDate.now(), LocalDate.now(), "booker"))
+
+        val bookingService = BookingService(bookingRepository)
+
+        bookingService.delete(booking.id!!, booking.booker)
+
+        assertThat(bookingRepository.findById(booking.id!!)).isEmpty
+    }
+
+    @Test
+    fun `Delete booking throws no data found if booking with provided id was not found`() {
+        val bookingService = BookingService(bookingRepository)
+
+        assertThrows<NoDataFoundException> { bookingService.delete(1, "booker") }
+    }
+
+    @Test
+    fun `Delete booking throws forbidden operation if other then booker tries to delete booking`() {
+        val booking = bookingRepository.save(Booking(null, LocalDate.now(), LocalDate.now(), "booker"))
+
+        val bookingService = BookingService(bookingRepository)
+
+        assertThrows<ForbiddenOperationException> { bookingService.delete(booking.id!!, "other booker") }
     }
 
 }

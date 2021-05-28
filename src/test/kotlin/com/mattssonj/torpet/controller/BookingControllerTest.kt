@@ -18,10 +18,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.get
-import org.springframework.test.web.servlet.post
-import org.springframework.test.web.servlet.put
+import org.springframework.test.web.servlet.*
 import java.time.LocalDate
 
 private const val BASE_URL = "/api/bookings"
@@ -110,6 +107,32 @@ class BookingControllerTest {
             accept = MediaType.APPLICATION_JSON
             contentType = MediaType.APPLICATION_JSON
             content = incomingBooking.toJson()
+        }.andExpect {
+            status { isForbidden() }
+        }
+    }
+
+    @Test
+    fun `Delete booking`() {
+        val idToBeDeleted = 1L
+
+        every { mockBookingService.delete(any(), any()) } returns Unit
+
+        mockMvc.delete("$BASE_URL/$idToBeDeleted") {
+            with(csrf())
+        }.andExpect {
+            status { isNoContent() }
+        }
+    }
+
+    @Test
+    fun `Delete booking that belongs to someone else returns 403`() {
+        val idToBeDeleted = 1L
+
+        every { mockBookingService.delete(any(), any()) } throws ForbiddenOperationException("")
+
+        mockMvc.delete("$BASE_URL/$idToBeDeleted") {
+            with(csrf())
         }.andExpect {
             status { isForbidden() }
         }
