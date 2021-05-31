@@ -17,7 +17,8 @@ class DataSourceMockConfiguration {
     @Bean fun mockDataSource(): HikariDataSource = mockk(relaxed = true)
 }
 
-internal fun Any.toJson(): String = ObjectMapper()
+val objectMapper: ObjectMapper = ObjectMapper()
     .registerKotlinModule()
     .registerModule(JavaTimeModule())
-    .writeValueAsString(this)
+
+internal fun Any.toJson(): String = objectMapper.writeValueAsString(this)

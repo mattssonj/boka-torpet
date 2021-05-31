@@ -12,8 +12,10 @@ import java.time.LocalDate
 @RequestMapping("/api/bookings")
 class BookingController(private val bookingService: BookingService) {
 
-    @GetMapping
-    fun getAllBookings(): List<Booking> = bookingService.getAllBookings()
+
+    @GetMapping fun getAllBookings(): List<Booking> = bookingService.getAllOngoingBookings() + bookingService.getAllUpcomingBookings()
+    @GetMapping(params = ["onlyUpcoming"]) fun getAllUpcomingBookings(@RequestParam onlyUpcoming: Boolean): List<Booking> = bookingService.getAllUpcomingBookings()
+    @GetMapping(params = ["onlyOngoing"]) fun getAllOngoingBookings(@RequestParam onlyOngoing: Boolean): List<Booking> = bookingService.getAllOngoingBookings()
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

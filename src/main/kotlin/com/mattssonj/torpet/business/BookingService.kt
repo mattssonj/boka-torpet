@@ -11,9 +11,10 @@ import java.time.LocalDate
 @Service
 class BookingService(private val bookingRepository: BookingRepository) {
 
-    fun getAllBookings(): List<Booking> =
-        bookingRepository.findAllByStartDateIsAfterOrderByStartDate(LocalDate.now().minusDays(1))
+    fun getAllUpcomingBookings(): List<Booking> =
+        bookingRepository.findAllByStartDateIsAfterOrderByStartDate(LocalDate.now())
 
+    fun getAllOngoingBookings(): List<Booking> = bookingRepository.findAllByStartDateIsOrderByEndDate()
     fun create(incomingBooking: IncomingBooking, booker: String): Booking {
         verify(incomingBooking)
 

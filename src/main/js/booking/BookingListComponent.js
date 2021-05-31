@@ -11,10 +11,10 @@ const initialShowing = {
 
 const getBookings = (responseHandler) => {
     Axios.all([
-        Axios.get('/api/bookings'),
-        Axios.get('/api/bookings')
+        Axios.get('/api/bookings?onlyOngoing=true'),
+        Axios.get('/api/bookings?onlyUpcoming=true')
     ]).then(Axios.spread((ongoing, upcoming) => {
-        responseHandler({ongoing: [], upcoming: upcoming.data})
+        responseHandler({ongoing: ongoing.data, upcoming: upcoming.data})
     })).catch(error => {
         console.log('Error occurred when getting bookings: ' + error.response)
         responseHandler(initialShowing)

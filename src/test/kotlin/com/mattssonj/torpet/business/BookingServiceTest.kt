@@ -25,28 +25,28 @@ internal class BookingServiceTest {
 
         bookingRepository.deleteAll()
 
-        assertThat(bookingService.getAllBookings()).isEmpty()
+        assertThat(bookingService.getAllUpcomingBookings()).isEmpty()
     }
 
     @Test
     fun `Booking exist`() {
         val bookingService = BookingService(bookingRepository)
 
-        val booking = bookingRepository.save(Booking(null, LocalDate.now()))
+        val booking = bookingRepository.save(Booking(null, LocalDate.now().plusDays(1)))
 
-        assertThat(bookingService.getAllBookings()).containsOnly(booking)
+        assertThat(bookingService.getAllUpcomingBookings()).containsOnly(booking)
     }
 
     @Test
     fun `Order multiple bookings by next upcoming`() {
-        val next = Booking(null, LocalDate.now(), LocalDate.now().plusDays(1))
+        val next = Booking(null, LocalDate.now().plusDays(1), LocalDate.now().plusDays(1))
         val after = Booking(null, LocalDate.now().plusDays(2), LocalDate.now().plusDays(3))
 
         bookingRepository.save(after)
         bookingRepository.save(next)
 
         val bookingService = BookingService(bookingRepository)
-        assertThat(bookingService.getAllBookings()).containsExactly(next, after)
+        assertThat(bookingService.getAllUpcomingBookings()).containsExactly(next, after)
     }
 
     @Test
@@ -56,7 +56,29 @@ internal class BookingServiceTest {
         bookingRepository.save(passed)
 
         val bookingService = BookingService(bookingRepository)
-        assertThat(bookingService.getAllBookings()).isEmpty()
+        assertThat(bookingService.getAllUpcomingBookings()).isEmpty()
+    }
+
+    @Test
+    fun `Only return bookings that is ongoing`() {
+        val ongoing = Booking(null, LocalDate.now(), LocalDate.now().plusDays(1))
+
+        bookingRepository.save(ongoing)
+
+        val bookingService = BookingService(bookingRepository)
+        assertThat(bookingService.getAllOngoingBookings()).containsExactly(ongoing)
+    }
+
+    @Test
+    fun `Order multiple ongoing bookings by ending earliest`() {
+        val endsLater = Booking(null, LocalDate.now(), LocalDate.now().plusDays(5))
+        val endsSoon = Booking(null, LocalDate.now(), LocalDate.now().plusDays(1))
+
+        bookingRepository.save(endsSoon)
+        bookingRepository.save(endsLater)
+
+        val bookingService = BookingService(bookingRepository)
+        assertThat(bookingService.getAllOngoingBookings()).containsExactly(endsSoon, endsLater)
     }
 
     @Test

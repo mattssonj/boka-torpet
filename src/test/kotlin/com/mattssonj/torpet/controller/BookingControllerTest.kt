@@ -1,7 +1,9 @@
 package com.mattssonj.torpet.controller
 
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.mattssonj.torpet.DataSourceMockConfiguration
 import com.mattssonj.torpet.business.BookingService
+import com.mattssonj.torpet.objectMapper
 import com.mattssonj.torpet.persistence.Booking
 import com.mattssonj.torpet.toJson
 import io.mockk.every
@@ -34,14 +36,51 @@ class BookingControllerTest {
 
     @Test
     fun `Get all bookings`() {
-        val booking = Booking(1)
+        val upcomingBooking = Booking(1)
+        val ongoingBooking = Booking(2)
 
-        every { mockBookingService.getAllBookings() } returns listOf(booking)
+        every { mockBookingService.getAllUpcomingBookings() } returns listOf(upcomingBooking)
+        every { mockBookingService.getAllOngoingBookings() } returns listOf(ongoingBooking)
 
         mockMvc.get(BASE_URL).andExpect {
             status { isOk() }
-            jsonPath("$.[0].id") { value(booking.id) }
+            jsonPath("$.[0].id") { value(ongoingBooking.id) }
+            jsonPath("$.[1].id") { value(upcomingBooking.id) }
         }
+    }
+
+    @Test
+    fun `Get all ongoing bookings`() {
+        val upcomingBooking = Booking(1)
+        val ongoingBooking = Booking(2)
+
+        every { mockBookingService.getAllUpcomingBookings() } returns listOf(upcomingBooking)
+        every { mockBookingService.getAllOngoingBookings() } returns listOf(ongoingBooking)
+
+        val jsonResponse = mockMvc.get("$BASE_URL?onlyOngoing=true").andExpect {
+            status { isOk() }
+        }.andReturn().response.contentAsString
+
+        val bookings = objectMapper.readValue<List<Booking>>(jsonResponse)
+        assertThat(bookings).hasSize(1)
+        assertThat(bookings[0]).isEqualTo(ongoingBooking)
+    }
+
+    @Test
+    fun `Get all upcoming bookings`() {
+        val upcomingBooking = Booking(1)
+        val ongoingBooking = Booking(2)
+
+        every { mockBookingService.getAllUpcomingBookings() } returns listOf(upcomingBooking)
+        every { mockBookingService.getAllOngoingBookings() } returns listOf(ongoingBooking)
+
+        val jsonResponse = mockMvc.get("$BASE_URL?onlyUpcoming=true").andExpect {
+            status { isOk() }
+        }.andReturn().response.contentAsString
+
+        val bookings = objectMapper.readValue<List<Booking>>(jsonResponse)
+        assertThat(bookings).hasSize(1)
+        assertThat(bookings[0]).isEqualTo(upcomingBooking)
     }
 
     @Test
