@@ -1,4 +1,4 @@
--- The following two tables are used by default spring security UserDetails
+/*-- The following two tables are used by default spring security UserDetails
 create table users(
                       username varchar_ignorecase(50) not null primary key,
                       password varchar_ignorecase(500) not null,
@@ -11,3 +11,4 @@ create table authorities (
                              constraint fk_authorities_users foreign key(username) references users(username)
 );
 create unique index ix_auth_username on authorities (username,authority);
+*/

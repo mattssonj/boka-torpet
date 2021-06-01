@@ -4,10 +4,8 @@ import org.springframework.context.annotation.Bean
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
-import org.springframework.security.core.userdetails.User
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.provisioning.JdbcUserDetailsManager
 import org.springframework.security.provisioning.UserDetailsManager
@@ -44,22 +42,12 @@ class SecurityConfiguration(private val datasource: DataSource) : WebSecurityCon
     }
 
     override fun configure(auth: AuthenticationManagerBuilder) {
-        val defaultUser = User.builder()
-            .username("user")
-            .password("password".encode())
-            .roles(Roles.USER, Roles.DEV).build()
-
         auth
             .jdbcAuthentication()
             .dataSource(datasource)
             .passwordEncoder(passwordEncoder)
-            .withUser(defaultUser)
     }
 
-    @Bean fun userDetailsManager(): UserDetailsManager =JdbcUserDetailsManager(datasource)
+    @Bean fun userDetailsManager(): UserDetailsManager = JdbcUserDetailsManager(datasource)
 
-    // TODO Remove this later on
-    override fun configure(web: WebSecurity) {
-        web.ignoring().antMatchers("/h2-console/**")
-    }
 }

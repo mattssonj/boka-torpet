@@ -1,15 +1,19 @@
 package com.mattssonj.torpet
 
 import com.mattssonj.torpet.business.AdminService
+import com.mattssonj.torpet.business.UserService
 import com.mattssonj.torpet.controller.IncomingNewUser
 import com.mattssonj.torpet.persistence.Booking
 import com.mattssonj.torpet.persistence.BookingRepository
 import com.mattssonj.torpet.persistence.Message
 import com.mattssonj.torpet.persistence.MessageRepository
 import com.mattssonj.torpet.security.Roles
+import com.mattssonj.torpet.security.encode
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.provisioning.UserDetailsManager
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import javax.annotation.PostConstruct
@@ -68,6 +72,17 @@ class DevConfiguration(
         adminService.createUser(IncomingNewUser("TestUser2", "password"), "Developer")
         adminService.createUser(IncomingNewUser("TestUser3", "password"), "Developer")
         adminService.createUser(IncomingNewUser("utanadmin", "password"), "Developer")
+    }
+
+    @Autowired
+    private fun addDevAdminUser(userDetailsManager: UserDetailsManager, userService: UserService) {
+        val defaultUser = User.builder()
+            .username("user")
+            .password("password".encode())
+            .roles(Roles.USER, Roles.DEV).build()
+
+        userDetailsManager.createUser(defaultUser)
+        userService.createUserInformation(defaultUser.username, "Developer")
     }
 
 }
