@@ -74,7 +74,7 @@ export default function BookingModal({show, hideFunction}) {
             <Modal.Footer>
                 <Button variant="secondary" onClick={hideFunction}>Stäng</Button>
                 <Button variant="primary" onClick={!isBooking ? createBooking : null}
-                        disabled={isBooking}>{isBooking ? 'Bokar...' : 'Home'}</Button>
+                        disabled={isBooking}>{isBooking ? 'Bokar...' : 'Boka'}</Button>
             </Modal.Footer>
         </Modal>
     );

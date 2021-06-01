@@ -12,8 +12,10 @@ import java.time.LocalDate
 @RequestMapping("/api/bookings")
 class BookingController(private val bookingService: BookingService) {
 
-    @GetMapping
-    fun getAllBookings(): List<Booking> = bookingService.getAllBookings()
+
+    @GetMapping fun getAllBookings(): List<Booking> = bookingService.getAllOngoingBookings() + bookingService.getAllUpcomingBookings()
+    @GetMapping(params = ["onlyUpcoming"]) fun getAllUpcomingBookings(@RequestParam onlyUpcoming: Boolean): List<Booking> = bookingService.getAllUpcomingBookings()
+    @GetMapping(params = ["onlyOngoing"]) fun getAllOngoingBookings(@RequestParam onlyOngoing: Boolean): List<Booking> = bookingService.getAllOngoingBookings()
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -22,6 +24,25 @@ class BookingController(private val bookingService: BookingService) {
         @AuthenticationPrincipal user: User
     ): Booking {
         return bookingService.create(incomingBooking, user.username)
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    fun updateBooking(
+        @PathVariable id: Long,
+        @RequestBody incomingBooking: IncomingBooking,
+        @AuthenticationPrincipal user: User
+    ): Booking {
+        return bookingService.update(id, incomingBooking, user.username)
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteBooking(
+        @PathVariable id: Long,
+        @AuthenticationPrincipal user: User
+    ) {
+        bookingService.delete(id, user.username)
     }
 
 }
