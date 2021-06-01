@@ -14,20 +14,7 @@ For more information on how to configure and handle the UserDetailsService etc s
 
 ### Database
 To use the `JdbcDaoImpl` there are a couple of tables we need to implement. See docs above for more information.
-```sql
-create table users(
-    username varchar_ignorecase(50) not null primary key,
-    password varchar_ignorecase(500) not null,
-    enabled boolean not null
-);
-
-create table authorities (
-    username varchar_ignorecase(50) not null,
-    authority varchar_ignorecase(50) not null,
-    constraint fk_authorities_users foreign key(username) references users(username)
-);
-create unique index ix_auth_username on authorities (username,authority);
-```
+These tables are created by using liquibase.
 
 ## Dev mode
 We are able to run the backend and frontend service as two separate services. To do this we can run the backend server
@@ -51,9 +38,11 @@ To perform end-to-end tests we use Cypress. TODO
 - [x] Create/Edit message
 - [x] Book an interval
 - [x] Create new users
-- [ ] Personal info for a user
-- [ ] Show ongoing bookings
-- [ ] Delete booking
+- [x] Personal info for a user
+- [x] Show ongoing bookings
+- [x] Delete booking
+
+Time to setup postgres and deploy to heroku
 
 # Ideas
 To show the calendar this might be of great use:
