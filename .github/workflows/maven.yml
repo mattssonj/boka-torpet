@@ -22,4 +22,4 @@ jobs:
         java-version: '11'
         distribution: 'adopt'
     - name: Build and deploy demo to heroku
-      run: HEROKU_API_KEY=${{secrets.HEROKUKEY}} mvn heroku:deploy -Ddeploy.profile=demo -Dspring.profiles.active=dev -Dheroku.appName=${{secrets.DEMO_APP_NAME}}
+      run: HEROKU_API_KEY=${{ secrets.HEROKUKEY }} mvn heroku:deploy -Ddeploy.profile=demo -Dspring.profiles.active=dev -Dheroku.appName=${{ secrets.DEMO_APP_NAME }}
