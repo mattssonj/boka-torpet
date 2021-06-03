@@ -70,15 +70,25 @@ internal class BookingServiceTest {
     }
 
     @Test
-    fun `Order multiple ongoing bookings by ending earliest`() {
-        val endsLater = Booking(null, LocalDate.now(), LocalDate.now().plusDays(5))
-        val endsSoon = Booking(null, LocalDate.now(), LocalDate.now().plusDays(1))
+    fun `If ongoing started long ago but still nog passed`() {
+        val ongoing = Booking(null, LocalDate.now().minusDays(6), LocalDate.now().plusDays(1))
 
-        bookingRepository.save(endsSoon)
-        bookingRepository.save(endsLater)
+        bookingRepository.save(ongoing)
 
         val bookingService = BookingService(bookingRepository)
-        assertThat(bookingService.getAllOngoingBookings()).containsExactly(endsSoon, endsLater)
+        assertThat(bookingService.getAllOngoingBookings()).containsExactly(ongoing)
+    }
+
+    @Test
+    fun `Order multiple ongoing bookings by starting earliest`() {
+        val startsLater = Booking(null, LocalDate.now().minusDays(5), LocalDate.now().plusDays(5))
+        val startedLongTimeAgo = Booking(null, LocalDate.now().minusMonths(1), LocalDate.now().plusDays(1))
+
+        bookingRepository.save(startedLongTimeAgo)
+        bookingRepository.save(startsLater)
+
+        val bookingService = BookingService(bookingRepository)
+        assertThat(bookingService.getAllOngoingBookings()).containsExactly(startedLongTimeAgo, startsLater)
     }
 
     @Test
