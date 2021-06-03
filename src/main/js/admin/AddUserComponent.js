@@ -45,7 +45,7 @@ export default function AddUserComponent() {
                             <Form.Control type="password" placeholder="Lösenord"
                                           onChange={e => setAddUserForm({...addUserForm, password: e.target.value})}
                                           value={addUserForm.password}/>
-                            <Form.Text>Lösenord måste vara minst 6 täcken och inte bara vara mellanrum</Form.Text>
+                            <Form.Text>Lösenord måste vara minst 6 tecken och inte bara vara mellanrum</Form.Text>
                             <Form.Text className="text-muted">
                                 Bara administratörer kan ändra eller återställa någons lösenord.
                             </Form.Text>

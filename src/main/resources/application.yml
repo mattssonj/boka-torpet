@@ -1,0 +1,12 @@
+spring:
+  profiles:
+    active: dev
+  liquibase:
+    change-log: db/changelog/db.changelog-master.xml
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+server:
+  port: ${PORT:8080}
+

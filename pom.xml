@@ -18,6 +18,8 @@
 	<properties>
 		<java.version>11</java.version>
 		<kotlin.version>1.5.10</kotlin.version>
+		<jarName>${project.artifactId}-${project.version}.jar</jarName>
+		<deploy.profile>demo</deploy.profile>
 	</properties>
 
 	<dependencies>
@@ -166,6 +168,26 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<!-- Deploy it directly to Heroku -->
+			<plugin>
+				<groupId>com.heroku.sdk</groupId>
+				<artifactId>heroku-maven-plugin</artifactId>
+				<version>3.0.4</version>
+				<configuration>
+					<appName>boka-torpet</appName>
+					<jdkVersion>${java.version}</jdkVersion>
+					<includeTarget>false</includeTarget>
+					<includes>
+						<include>target/${jarName}</include>
+					</includes>
+					<processTypes>
+						<web>java $JAVA_OPTS -Dspring.profiles.active=${deploy.profile} -jar target/${jarName}</web>
+					</processTypes>
+				</configuration>
+			</plugin>
+
+
 		</plugins>
 	</build>
 

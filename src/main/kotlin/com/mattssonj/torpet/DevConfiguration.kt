@@ -44,18 +44,24 @@ class DevConfiguration(
     private fun addBookings() {
         val old =
             Booking(startDate = LocalDate.now().minusMonths(1), endDate = LocalDate.now().minusMonths(1).plusDays(3))
-        val current = Booking(startDate = LocalDate.now().minusDays(2), endDate = LocalDate.now().plusDays(1))
+        val current = Booking(
+            startDate = LocalDate.now().minusDays(2),
+            endDate = LocalDate.now().plusDays(1),
+            booker = "user",
+            name = "Midsommarfest",
+            message = "Vi tänkte vara ca 15 pers och ha riktig brakfest. Andra får gärna komma upp samtidigt om de vill men det blir sena och högljudda kvällar"
+        )
         val upcoming1 = Booking(
             startDate = LocalDate.now().plusDays(3),
             endDate = LocalDate.now().plusDays(5),
-            booker = "Joakim",
+            booker = "TestUser2",
             name = "Test bokning 1",
-            message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae tempor ipsum. Proin at eros at turpis euismod bibendum dignissim a metus. Morbi id enim vitae diam ornare condimentum vitae at urna. Donec scelerisque dui quis massa rutrum consectetur."
+            message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae tempor ipsum. Proin at eros at turpis euismod bibendum dignissim a metus. Morbi id enim vitae diam ornare condimentum vitae at urna. Donec scelerisque dui quis massa rutrum consectetur. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae tempor ipsum. Proin at eros at turpis euismod bibendum dignissim a metus. Morbi id enim vitae diam ornare condimentum vitae at urna. Donec scelerisque dui quis massa rutrum consectetur."
         )
         val upcoming2 = Booking(
             startDate = LocalDate.now().plusDays(4),
             endDate = LocalDate.now().plusDays(6),
-            booker = "Joakim",
+            booker = "TestUser1",
             name = "Lorem ipsum",
             message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae tempor ipsum. Proin at eros at turpis euismod bibendum dignissim a metus. Morbi id enim vitae diam ornare condimentum vitae at urna. Donec scelerisque dui quis massa rutrum consectetur."
         )
