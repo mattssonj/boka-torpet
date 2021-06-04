@@ -22,7 +22,7 @@ import javax.annotation.PostConstruct
  */
 
 @Component
-@Profile("dev")
+@Profile("dev | demo")
 class DevConfiguration(
     private val messageRepository: MessageRepository,
     private val bookingRepository: BookingRepository,
