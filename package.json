@@ -17,7 +17,8 @@
   "scripts": {
     "watch": "webpack --watch --output-path ./target/classes/static/built/",
     "lint": "eslint --fix src",
-    "format": "prettier -w ."
+    "format": "prettier -w .",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -33,9 +34,14 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": "^6.0.0",
+    "lint-staged": "^11.0.0",
     "prettier": "^2.3.0",
     "webpack": "^5.22.0",
     "webpack-cli": "^4.5.0",
     "webpack-dev-server": "^3.11.2"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   }
 }
