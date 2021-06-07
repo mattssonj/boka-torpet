@@ -32,8 +32,8 @@ jobs:
         uses: codecov/codecov-action@v1
       - uses: actions/upload-artifact@v2
         with:
-          name: built
-          path: target
+          name: jarfile
+          path: target/*jar
 
       # - name: Build and deploy demo to heroku
       #   env:
@@ -49,12 +49,13 @@ jobs:
     steps:
       - uses: actions/download-artifact@v2
         with:
-          name: built
+          name: jarfile
       - uses: actions/setup-java@v2
         with:
           java-version: "11"
           distribution: "adopt"
       - name: Deploying Demo application
+        uses: actions/checkout@v2
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: mvn heroku:deploy-only -Ddeploy.profile=demo -Dheroku.appName=${{ secrets.HEROKU_DEMO_APP }}
