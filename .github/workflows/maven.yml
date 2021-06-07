@@ -54,8 +54,8 @@ jobs:
         with:
           java-version: "11"
           distribution: "adopt"
+      - uses: actions/checkout@v2
       - name: Deploying Demo application
-        uses: actions/checkout@v2
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: mvn heroku:deploy-only -Ddeploy.profile=demo -Dheroku.appName=${{ secrets.HEROKU_DEMO_APP }}
