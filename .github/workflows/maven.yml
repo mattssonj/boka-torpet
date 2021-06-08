@@ -11,12 +11,15 @@ on:
 
 jobs:
   test_js_code_quality:
+    name: Run Prettier with ESLint rules
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Check code quality with ESLint
         run: npx prettier --check .
+
   build:
+    name: Build, Test and upload Test Coverage
     needs: test_js_code_quality
     runs-on: ubuntu-latest
     steps:
@@ -46,15 +49,8 @@ jobs:
             target/*jar
             pom.xml
 
-      # - name: Build and deploy demo to heroku
-      #   env:
-      #     HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      #   run: mvn heroku:deploy -Ddeploy.profile=demo -Dspring.profiles.active=dev -Dheroku.appName=${{ secrets.HEROKU_DEMO_APP }}
-      # - name: Upload test coverge
-      #   uses: codecov/codecov-action@v1
-      #   with:
-      #     files:
   deploy_demo:
+    name: Deploy Demo application
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -76,4 +72,29 @@ jobs:
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: mvn heroku:deploy-only -Ddeploy.profile=demo -Dheroku.appName=${{ secrets.HEROKU_DEMO_APP }}
-      #...
+
+  deploy_prod:
+    name: Deploy to Production
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: Prod
+    steps:
+      - uses: actions/setup-java@v2
+        with:
+          java-version: "11"
+          distribution: "adopt"
+      - name: Cache local Maven repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - uses: actions/download-artifact@v2
+        with:
+          name: deployable
+      - name: Deploying Production Application
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: mvn heroku:deploy-only -Ddeploy.profile=prod -Dheroku.appName=${{ secrets.HEROKU_PROD_APP }}
