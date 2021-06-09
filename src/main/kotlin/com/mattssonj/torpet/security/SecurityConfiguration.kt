@@ -28,8 +28,6 @@ class SecurityConfiguration(private val datasource: DataSource) : WebSecurityCon
 
     override fun configure(http: HttpSecurity) {
         http
-            .requiresChannel().anyRequest().requiresSecure()
-            .and()
             .authorizeRequests()
             .mvcMatchers("/admin").hasAnyRole(Roles.ADMIN, Roles.DEV)
             .anyRequest().authenticated()
