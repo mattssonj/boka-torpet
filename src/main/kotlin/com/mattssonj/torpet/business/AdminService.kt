@@ -3,8 +3,6 @@ package com.mattssonj.torpet.business
 import com.mattssonj.torpet.controller.IncomingNewUser
 import com.mattssonj.torpet.controller.OutgoingUser
 import com.mattssonj.torpet.controller.UsernameAlreadyExistsException
-import com.mattssonj.torpet.persistence.UserInformation
-import com.mattssonj.torpet.persistence.UserInformationRepository
 import com.mattssonj.torpet.security.Roles
 import com.mattssonj.torpet.security.encode
 import org.springframework.security.core.userdetails.User
@@ -29,6 +27,18 @@ class AdminService(
     fun getAllRegisteredUsers(admin: String): List<OutgoingUser> {
         return userService.getAllUserInformation()
             .map { OutgoingUser(it.username, it.createdBy, admin.equals(it.createdBy, true)) }
+    }
+
+    fun updatePassword(username: String, newPassword: String) {
+        userDetailsManager.loadUserByUsername(username)
+            .let {
+                User.builder()
+                    .authorities(it.authorities)
+                    .username(it.username)
+                    .password(newPassword.encode())
+                    .build()
+            }
+            .also { userDetailsManager.updateUser(it) }
     }
 
     private fun verify(incomingNewUser: IncomingNewUser) {

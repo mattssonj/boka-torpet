@@ -3,6 +3,7 @@ package com.mattssonj.torpet.business
 import com.mattssonj.torpet.controller.IncomingNewUser
 import com.mattssonj.torpet.controller.UsernameAlreadyExistsException
 import com.mattssonj.torpet.persistence.UserInformationRepository
+import com.mattssonj.torpet.security.passwordEncoder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -108,6 +109,22 @@ internal class AdminServiceTest {
         val registeredUser = sut.getAllRegisteredUsers("OtherAdmin").first()
 
         assertThat(registeredUser.ableToDelete).isFalse
+    }
+
+    @Test
+    fun `Change password for given user`() {
+        val incomingNewUser = IncomingNewUser(USERNAME, "password")
+        sut.createUser(incomingNewUser, ADMIN)
+
+        val newPassword = "someOtherPassword"
+        sut.updatePassword(USERNAME, newPassword)
+
+        assertPasswordChange(USERNAME, newPassword)
+    }
+
+    private fun assertPasswordChange(username: String, password: String) {
+        val user = userDetailsManager.loadUserByUsername(username)
+        assertThat(passwordEncoder.matches(password, user.password)).isTrue
     }
 
 }

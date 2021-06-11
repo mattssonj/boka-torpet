@@ -2,6 +2,7 @@ package com.mattssonj.torpet.controller
 
 import com.mattssonj.torpet.DataSourceMockConfiguration
 import com.mattssonj.torpet.business.AdminService
+import com.mattssonj.torpet.security.Roles
 import com.mattssonj.torpet.toJson
 import io.mockk.every
 import io.mockk.mockk
@@ -18,6 +19,7 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
+import org.springframework.test.web.servlet.put
 
 private const val BASE_URL = "/api/admin"
 
@@ -141,6 +143,38 @@ class AdminControllerTest {
         }.andExpect {
             status { isOk() }
             jsonPath("$.[0].username") { value(outgoingUser.username) }
+        }
+    }
+
+    @Test
+    fun `Admin can update other users passwords`() {
+        mockMvc.put("$BASE_URL/users/username") {
+            with(csrf())
+            param(NEW_PASSWORD_REQUEST_PARAM, "password")
+        }.andExpect {
+            status { isNoContent() }
+        }
+    }
+
+    @Test
+    @WithMockUser(username = "userwithpassword", roles = [Roles.USER])
+    fun `User can update its own password`() {
+        mockMvc.put("$BASE_URL/users/userwithpassword") {
+            with(csrf())
+            param(NEW_PASSWORD_REQUEST_PARAM, "password")
+        }.andExpect {
+            status { isNoContent() }
+        }
+    }
+
+    @Test
+    @WithMockUser(username = "userwithpassword", roles = [Roles.USER])
+    fun `User cannot update others password`() {
+        mockMvc.put("$BASE_URL/users/otherUser") {
+            with(csrf())
+            param(NEW_PASSWORD_REQUEST_PARAM, "password")
+        }.andExpect {
+            status { isForbidden() }
         }
     }
 

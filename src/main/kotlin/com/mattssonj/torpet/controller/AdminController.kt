@@ -8,6 +8,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.User
 import org.springframework.web.bind.annotation.*
 
+internal const val NEW_PASSWORD_REQUEST_PARAM = "newPassword"
+
 @RestController
 @RequestMapping("/api/admin")
 @PreAuthorize("hasAnyRole('${Roles.ADMIN}', '${Roles.DEV}')")
@@ -26,6 +28,16 @@ class AdminController(private val adminService: AdminService) {
     @GetMapping("/users")
     fun getRegisteredUsers(@AuthenticationPrincipal user: User): List<OutgoingUser> {
         return adminService.getAllRegisteredUsers(user.username)
+    }
+
+    @PreAuthorize("hasAnyRole('${Roles.ADMIN}', '${Roles.DEV}') or #username == principal.username")
+    @PutMapping("/users/{username}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun changePassword(
+        @PathVariable username: String,
+        @RequestParam(value = NEW_PASSWORD_REQUEST_PARAM) newPassword: String
+    ) {
+        adminService.updatePassword(username, newPassword)
     }
 
 }
