@@ -18,7 +18,8 @@ class AdminService(
 ) {
 
     fun createUser(incomingNewUser: IncomingNewUser, admin: String): NewUser {
-        verify(incomingNewUser)
+        verifyUsername(incomingNewUser.username)
+        verifyPassword(incomingNewUser.password)
         addUser(incomingNewUser)
         userService.createUserInformation(incomingNewUser.username, admin)
         return incomingNewUser.username
@@ -30,6 +31,7 @@ class AdminService(
     }
 
     fun updatePassword(username: String, newPassword: String) {
+        verifyPassword(newPassword)
         userDetailsManager.loadUserByUsername(username)
             .let {
                 User.builder()
@@ -41,14 +43,16 @@ class AdminService(
             .also { userDetailsManager.updateUser(it) }
     }
 
-    private fun verify(incomingNewUser: IncomingNewUser) {
-        if (incomingNewUser.username.isBlank()) throw IllegalArgumentException("Username cannot be empty or only contain spaces")
-        if (incomingNewUser.username.contains(' ')) throw IllegalArgumentException("Username cannot contain spaces")
-        if (userDetailsManager.userExists(incomingNewUser.username))
-            throw UsernameAlreadyExistsException(incomingNewUser.username)
+    private fun verifyUsername(username: String) {
+        if (username.isBlank()) throw IllegalArgumentException("Username cannot be empty or only contain spaces")
+        if (username.contains(' ')) throw IllegalArgumentException("Username cannot contain spaces")
+        if (userDetailsManager.userExists(username))
+            throw UsernameAlreadyExistsException(username)
+    }
 
-        if (incomingNewUser.password.isBlank()) throw IllegalArgumentException("Password cannot be empty or only contain spaces")
-        if (incomingNewUser.password.length < MIN_PASSWORD_SIZE) throw IllegalArgumentException("Password needs to contain at least $MIN_PASSWORD_SIZE")
+    private fun verifyPassword(password: String) {
+        if (password.isBlank()) throw IllegalArgumentException("Password cannot be empty or only contain spaces")
+        if (password.length < MIN_PASSWORD_SIZE) throw IllegalArgumentException("Password needs to contain at least $MIN_PASSWORD_SIZE")
     }
 
     private fun addUser(incomingNewUser: IncomingNewUser) {

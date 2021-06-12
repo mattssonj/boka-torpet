@@ -122,6 +122,15 @@ internal class AdminServiceTest {
         assertPasswordChange(USERNAME, newPassword)
     }
 
+    @Test
+    fun `Changes to invalid password throws exception`() {
+        val incomingNewUser = IncomingNewUser(USERNAME, "password")
+        sut.createUser(incomingNewUser, ADMIN)
+
+        val newPassword = "inv"
+        assertThrows<IllegalArgumentException> {  sut.updatePassword(USERNAME, newPassword) }
+    }
+
     private fun assertPasswordChange(username: String, password: String) {
         val user = userDetailsManager.loadUserByUsername(username)
         assertThat(passwordEncoder.matches(password, user.password)).isTrue
