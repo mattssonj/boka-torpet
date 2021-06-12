@@ -6,6 +6,8 @@ import com.mattssonj.torpet.controller.UsernameAlreadyExistsException
 import com.mattssonj.torpet.security.Roles
 import com.mattssonj.torpet.security.encode
 import org.springframework.security.core.userdetails.User
+import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.provisioning.UserDetailsManager
 import org.springframework.stereotype.Service
 
@@ -32,15 +34,13 @@ class AdminService(
 
     fun updatePassword(username: String, newPassword: String) {
         verifyPassword(newPassword)
-        userDetailsManager.loadUserByUsername(username)
-            .let {
-                User.builder()
-                    .authorities(it.authorities)
-                    .username(it.username)
-                    .password(newPassword.encode())
-                    .build()
-            }
-            .also { userDetailsManager.updateUser(it) }
+        getUserDetails(username).let {
+            User.builder()
+                .authorities(it.authorities)
+                .username(it.username)
+                .password(newPassword.encode())
+                .build()
+        }.also { userDetailsManager.updateUser(it) }
     }
 
     private fun verifyUsername(username: String) {
@@ -62,6 +62,14 @@ class AdminService(
             .roles(Roles.USER)
             .build()
         userDetailsManager.createUser(newUser)
+    }
+
+    private fun getUserDetails(username: String): UserDetails {
+        return try {
+            userDetailsManager.loadUserByUsername(username)
+        } catch (e: UsernameNotFoundException) {
+            throw IllegalArgumentException("No user with username $username was found")
+        }
     }
 
 }

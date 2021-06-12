@@ -73,7 +73,7 @@ internal class AdminServiceTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["asdas", "", "           ", ])
+    @ValueSource(strings = ["asdas", "", "           "])
     fun `Password need to fill certain criteria`(badPassword: String) {
         val incomingNewUser = IncomingNewUser(USERNAME, badPassword)
 
@@ -128,7 +128,12 @@ internal class AdminServiceTest {
         sut.createUser(incomingNewUser, ADMIN)
 
         val newPassword = "inv"
-        assertThrows<IllegalArgumentException> {  sut.updatePassword(USERNAME, newPassword) }
+        assertThrows<IllegalArgumentException> { sut.updatePassword(USERNAME, newPassword) }
+    }
+
+    @Test
+    fun `Changing password of user that does not exists throws exception`() {
+        assertThrows<IllegalArgumentException> { sut.updatePassword("userThatDoesNotExist", "newPassword") }
     }
 
     private fun assertPasswordChange(username: String, password: String) {
