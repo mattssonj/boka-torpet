@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, Col, Row } from "react-bootstrap";
+import ChangePasswordComponent from "../ChangePasswordComponent";
 
 export default function UserInformationComponent({ userInformation }) {
   return (
@@ -19,6 +20,11 @@ export default function UserInformationComponent({ userInformation }) {
               Kan du ta bort:{" "}
               <strong>{userInformation.ableToDelete ? "Ja" : "Nej"}</strong>
             </p>
+          </Col>
+          <Col>
+            {userInformation.ableToDelete ? (
+              <ChangePasswordComponent username={userInformation.username} />
+            ) : null}
           </Col>
         </Row>
       </Card.Body>

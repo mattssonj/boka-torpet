@@ -3,6 +3,7 @@ import Axios from "axios";
 
 import { Button, Form, Modal } from "react-bootstrap";
 import { toaster } from "../common/Toaster";
+import { backendClient } from "../common/BackendClient";
 
 const initialFormObject = {
   name: "",
@@ -34,14 +35,13 @@ export default function ChangeUserInformationForm({ show, hideFunction }) {
   };
 
   const getInformation = () => {
-    Axios.get("/api/users/current")
-      .then((response) => {
-        setUserInformation(response.data);
-      })
-      .catch((response) => {
-        console.log(response.response);
+    backendClient
+      .getCurrentLoggedInUser()
+      .then((userInformation) => setUserInformation(userInformation))
+      .catch((error) => {
+        console.log(error.response);
         toaster.error(
-          `Fel när kontaktuppgifter skulle hämtas: ${response.response.data.message}`
+          `Fel när kontaktuppgifter skulle hämtas: ${error.response.data.message}`
         );
       });
   };

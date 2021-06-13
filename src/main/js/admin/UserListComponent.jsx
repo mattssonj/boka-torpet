@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { Button, Col, ListGroup, Row, Tab } from "react-bootstrap";
 import Axios from "axios";
 import { toaster } from "../common/Toaster";
-import UserInformationComponent from "../user/UserInformationComponent";
+import UserInformationComponent from "./UserInformationComponent";
 
 const FORBIDDEN = 403;
 

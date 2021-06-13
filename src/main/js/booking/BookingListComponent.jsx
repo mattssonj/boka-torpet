@@ -3,6 +3,7 @@ import Axios from "axios";
 
 import { Button, Col, Row } from "react-bootstrap";
 import BookingListRow from "./BookingListElement";
+import { backendClient } from "../common/BackendClient";
 
 const initialShowing = {
   ongoing: [],
@@ -63,12 +64,11 @@ export default function Bookings() {
   };
 
   const getLoggedInUsername = () => {
-    Axios.get("/api/users/current")
-      .then((response) => {
-        setLoggedInUsername(response.data.username);
-      })
-      .catch((response) => {
-        console.log(response.response);
+    backendClient
+      .getCurrentLoggedInUser()
+      .then((userInfo) => setLoggedInUsername(userInfo.username))
+      .catch((_) => {
+        /* Do nothing */
       });
   };
 

@@ -6,6 +6,8 @@ import { Button, Col, Jumbotron, Row } from "react-bootstrap";
 import NewsModal from "./NewsModal";
 import DateFormatter from "../common/DateFormatter";
 import ChangeUserInformationComponent from "../user/ChangeUserInformationComponent";
+import ChangePasswordComponent from "../ChangePasswordComponent";
+import { backendClient } from "../common/BackendClient";
 
 const ErrorMessage = "Kunde inte hämta nyheter.";
 
@@ -16,9 +18,9 @@ const InitialNews = {
 };
 
 export default function News() {
-  const history = useHistory();
   const [news, setNews] = useState(InitialNews);
   const [showModal, setShowModal] = useState(false);
+  const [loggedInUsername, setLoggedInUsername] = useState("");
 
   const updateNews = (data) => {
     setNews({
@@ -33,10 +35,6 @@ export default function News() {
     updateNews(data);
   };
 
-  const goToAdmin = () => {
-    history.push("/admin");
-  };
-
   useEffect(() => {
     Axios.get("/api/messages/newest")
       .then((response) => {
@@ -45,6 +43,10 @@ export default function News() {
       .catch((error) => {
         setNews({ ...news, message: `${ErrorMessage} ${error}` });
       });
+
+    backendClient
+      .getCurrentLoggedInUser()
+      .then((user) => setLoggedInUsername(user.username));
   }, []);
 
   return (
@@ -75,6 +77,7 @@ export default function News() {
           </Col>
           <Col className="text-center">
             <ChangeUserInformationComponent />
+            <ChangePasswordComponent username={loggedInUsername} />
           </Col>
           <Col className="text-right">
             <Link

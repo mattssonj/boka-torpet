@@ -2,7 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Col, Jumbotron, Row } from "react-bootstrap";
 
-const message = "Här kan man lägga till och ta bort användare.";
+const message =
+  "Här kan man lägga till och ta bort användare. Du kan också hjälpa de användare du har lagt till att byta lösenord.";
 
 export default function AdminJumbotron() {
   return (
