@@ -3,8 +3,8 @@ import ReactDOM from "react-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import Home from "./Home";
-import Admin from "./admin/Admin";
+import Home from "./Home.jsx";
+import Admin from "./admin/Admin.jsx";
 import "react-toastify/dist/ReactToastify.css";
 
 const App = () => (

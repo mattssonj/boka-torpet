@@ -18,4 +18,4 @@ const toaster = {
   },
 };
 
-export { toaster as default };
+export default toaster;

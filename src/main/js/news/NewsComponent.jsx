@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Axios from "axios";
 import { Button, Col, Jumbotron, Row } from "react-bootstrap";
 
@@ -7,7 +7,7 @@ import NewsModal from "./NewsModal";
 import DateFormatter from "../common/DateFormatter";
 import ChangeUserInformationComponent from "../user/ChangeUserInformationComponent";
 import ChangePasswordComponent from "../ChangePasswordComponent";
-import { backendClient } from "../common/BackendClient";
+import backendClient from "../common/BackendClient";
 
 const ErrorMessage = "Kunde inte hämta nyheter.";
 

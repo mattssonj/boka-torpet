@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Axios from "axios";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
-import { toaster } from "../common/Toaster";
+import toaster from "../common/Toaster";
 
 const emptyForm = {
   name: "",

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Col, Form, Row } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Axios from "axios";
-import { toaster } from "../common/Toaster";
+import toaster from "../common/Toaster";
 
 const initialFormValues = {
   username: "",

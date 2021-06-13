@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 
 import { Button, Form, Modal } from "react-bootstrap";
-import { toaster } from "../common/Toaster";
+import toaster from "../common/Toaster";
 
 const initialInformation = {
   name: "",

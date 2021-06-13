@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 
 import { Button, Form, Modal } from "react-bootstrap";
-import { toaster } from "../common/Toaster";
-import { backendClient } from "../common/BackendClient";
+import toaster from "../common/Toaster";
+import backendClient from "../common/BackendClient";
 
 const initialFormObject = {
   name: "",

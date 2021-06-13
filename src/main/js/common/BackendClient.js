@@ -14,4 +14,4 @@ const backendClient = {
   },
 };
 
-export { backendClient as default };
+export default backendClient;
