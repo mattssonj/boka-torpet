@@ -3,6 +3,7 @@ package com.mattssonj.torpet.business
 import com.mattssonj.torpet.controller.IncomingNewUser
 import com.mattssonj.torpet.controller.UsernameAlreadyExistsException
 import com.mattssonj.torpet.persistence.UserInformationRepository
+import com.mattssonj.torpet.security.passwordEncoder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -72,7 +73,7 @@ internal class AdminServiceTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["asdas", "", "           ", ])
+    @ValueSource(strings = ["asdas", "", "           "])
     fun `Password need to fill certain criteria`(badPassword: String) {
         val incomingNewUser = IncomingNewUser(USERNAME, badPassword)
 
@@ -108,6 +109,36 @@ internal class AdminServiceTest {
         val registeredUser = sut.getAllRegisteredUsers("OtherAdmin").first()
 
         assertThat(registeredUser.ableToDelete).isFalse
+    }
+
+    @Test
+    fun `Change password for given user`() {
+        val incomingNewUser = IncomingNewUser(USERNAME, "password")
+        sut.createUser(incomingNewUser, ADMIN)
+
+        val newPassword = "someOtherPassword"
+        sut.updatePassword(USERNAME, newPassword)
+
+        assertPasswordChange(USERNAME, newPassword)
+    }
+
+    @Test
+    fun `Changes to invalid password throws exception`() {
+        val incomingNewUser = IncomingNewUser(USERNAME, "password")
+        sut.createUser(incomingNewUser, ADMIN)
+
+        val newPassword = "inv"
+        assertThrows<IllegalArgumentException> { sut.updatePassword(USERNAME, newPassword) }
+    }
+
+    @Test
+    fun `Changing password of user that does not exists throws exception`() {
+        assertThrows<IllegalArgumentException> { sut.updatePassword("userThatDoesNotExist", "newPassword") }
+    }
+
+    private fun assertPasswordChange(username: String, password: String) {
+        val user = userDetailsManager.loadUserByUsername(username)
+        assertThat(passwordEncoder.matches(password, user.password)).isTrue
     }
 
 }

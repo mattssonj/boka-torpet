@@ -2,6 +2,7 @@ package com.mattssonj.torpet.controller
 
 import com.mattssonj.torpet.DataSourceMockConfiguration
 import com.mattssonj.torpet.business.AdminService
+import com.mattssonj.torpet.security.Roles
 import com.mattssonj.torpet.toJson
 import io.mockk.every
 import io.mockk.mockk
@@ -18,6 +19,7 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
+import org.springframework.test.web.servlet.put
 
 private const val BASE_URL = "/api/admin"
 
@@ -141,6 +143,47 @@ class AdminControllerTest {
         }.andExpect {
             status { isOk() }
             jsonPath("$.[0].username") { value(outgoingUser.username) }
+        }
+    }
+
+    @Test
+    fun `Admin can update other users passwords`() {
+        val userPassword = UserPassword("user", "password")
+        mockMvc.post("$BASE_URL/users/changePassword") {
+            with(csrf())
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+            content = userPassword.toJson()
+        }.andExpect {
+            status { isNoContent() }
+        }
+    }
+
+    @Test
+    @WithMockUser(username = "userWithPassword", roles = [Roles.USER])
+    fun `User can update its own password`() {
+        val userPassword = UserPassword("userWithPassword", "password")
+        mockMvc.post("$BASE_URL/users/changePassword") {
+            with(csrf())
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+            content = userPassword.toJson()
+        }.andExpect {
+            status { isNoContent() }
+        }
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = [Roles.USER])
+    fun `User cannot update others password`() {
+        val userPassword = UserPassword("otherUser", "password")
+        mockMvc.post("$BASE_URL/users/changePassword") {
+            with(csrf())
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+            content = userPassword.toJson()
+        }.andExpect {
+            status { isForbidden() }
         }
     }
 
