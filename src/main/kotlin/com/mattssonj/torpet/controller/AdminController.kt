@@ -30,17 +30,15 @@ class AdminController(private val adminService: AdminService) {
         return adminService.getAllRegisteredUsers(user.username)
     }
 
-    @PreAuthorize("hasAnyRole('${Roles.ADMIN}', '${Roles.DEV}') or #username == principal.username")
-    @PutMapping("/users/{username}")
+    @PreAuthorize("hasAnyRole('${Roles.ADMIN}', '${Roles.DEV}') or #userPassword.username == principal.username")
+    @PostMapping("/users/changePassword")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun changePassword(
-        @PathVariable username: String,
-        @RequestParam(value = NEW_PASSWORD_REQUEST_PARAM) newPassword: String
-    ) {
-        adminService.updatePassword(username, newPassword)
+    fun changePassword(@RequestBody userPassword: UserPassword) {
+        adminService.updatePassword(userPassword.username, userPassword.newPassword)
     }
 
 }
 
 data class IncomingNewUser(val username: String, val password: String)
 data class OutgoingUser(val username: String, val createdBy: String, val ableToDelete: Boolean)
+data class UserPassword(val username: String, val newPassword: String)

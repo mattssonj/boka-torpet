@@ -148,31 +148,40 @@ class AdminControllerTest {
 
     @Test
     fun `Admin can update other users passwords`() {
-        mockMvc.put("$BASE_URL/users/username") {
+        val userPassword = UserPassword("user", "password")
+        mockMvc.post("$BASE_URL/users/changePassword") {
             with(csrf())
-            param(NEW_PASSWORD_REQUEST_PARAM, "password")
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+            content = userPassword.toJson()
         }.andExpect {
             status { isNoContent() }
         }
     }
 
     @Test
-    @WithMockUser(username = "userwithpassword", roles = [Roles.USER])
+    @WithMockUser(username = "userWithPassword", roles = [Roles.USER])
     fun `User can update its own password`() {
-        mockMvc.put("$BASE_URL/users/userwithpassword") {
+        val userPassword = UserPassword("userWithPassword", "password")
+        mockMvc.post("$BASE_URL/users/changePassword") {
             with(csrf())
-            param(NEW_PASSWORD_REQUEST_PARAM, "password")
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+            content = userPassword.toJson()
         }.andExpect {
             status { isNoContent() }
         }
     }
 
     @Test
-    @WithMockUser(username = "userwithpassword", roles = [Roles.USER])
+    @WithMockUser(username = "user", roles = [Roles.USER])
     fun `User cannot update others password`() {
-        mockMvc.put("$BASE_URL/users/otherUser") {
+        val userPassword = UserPassword("otherUser", "password")
+        mockMvc.post("$BASE_URL/users/changePassword") {
             with(csrf())
-            param(NEW_PASSWORD_REQUEST_PARAM, "password")
+            contentType = MediaType.APPLICATION_JSON
+            accept = MediaType.APPLICATION_JSON
+            content = userPassword.toJson()
         }.andExpect {
             status { isForbidden() }
         }
