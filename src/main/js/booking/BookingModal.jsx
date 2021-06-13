@@ -5,10 +5,10 @@ import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import toaster from "../common/Toaster";
 
 const initialFormObject = {
-  name: "testing",
-  message: "message",
-  startDate: "2021-12-12",
-  endDate: "2021-12-13",
+  name: "",
+  message: "",
+  startDate: "",
+  endDate: "",
 };
 
 export default function BookingModal({ show, hideFunction }) {
@@ -52,6 +52,7 @@ export default function BookingModal({ show, hideFunction }) {
                 setFormValues({ ...formValues, name: e.target.value })
               }
               value={formValues.name}
+              placeholder="Namn på boking"
             />
             <Form.Text className="text-muted">
               Namnet skulle kunna beskriva bokning, Ex. Midsommarfest eller
@@ -66,7 +67,7 @@ export default function BookingModal({ show, hideFunction }) {
                 setFormValues({ ...formValues, message: e.target.value })
               }
               value={formValues.message}
-              placeholder="Namn på bokning"
+              placeholder="Information om boking"
             />
             <Form.Text className="text-muted">
               En text som förklarar vad som ev. ska hända, Ex. "Vi är 10 pers
