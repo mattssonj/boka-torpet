@@ -1,29 +1,21 @@
 package com.mattssonj.torpet.security
 
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Profile
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.provisioning.JdbcUserDetailsManager
 import org.springframework.security.provisioning.UserDetailsManager
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository
 import javax.sql.DataSource
 
-object Roles {
-    const val USER = "USER"
-    const val ADMIN = "ADMIN"
-    const val DEV = "DEVELOPER"
-}
-
-val passwordEncoder = BCryptPasswordEncoder()
-fun String.encode(): String = passwordEncoder.encode(this)
-
+@Profile("dev")
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-class SecurityConfiguration(private val datasource: DataSource) : WebSecurityConfigurerAdapter() {
+class DevSecurityConfiguration(private val datasource: DataSource) : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
         http

@@ -11,6 +11,8 @@ import com.mattssonj.torpet.security.Roles
 import com.mattssonj.torpet.security.encode
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
+import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configurers.ChannelSecurityConfigurer
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.provisioning.UserDetailsManager
 import org.springframework.stereotype.Component
