@@ -11,20 +11,16 @@ class HomeController {
 
     private val logger = LoggerFactory.getLogger(HomeController::class.java)
 
-    @RequestMapping("/")
-    fun index(): String {
-        return "index"
-    }
-
     @RequestMapping("/login")
     fun loginRedirect(auth: Authentication?): String {
         return if (isAuthenticated(auth)) "redirect:/" else "login"
     }
 
-    @RequestMapping("/admin")
-    fun admin(): String {
-        return "forward:/"
-    }
+    @RequestMapping("/") fun index(): String = "index"
+    @RequestMapping("/admin") fun admin(): String = defaultForward
+    @RequestMapping("/path/**") fun forwardAllRequestToHome(): String = defaultForward
+
+    private val defaultForward = "forward:/"
 
     private fun isAuthenticated(auth: Authentication?): Boolean {
         return if (auth != null && auth.isAuthenticated) {
