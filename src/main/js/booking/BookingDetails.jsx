@@ -16,7 +16,7 @@ export default function BookingDetails({ booking }) {
         onSelect={() => setShowModal(true)}
       >
         <Nav.Item>
-          <Nav.Link eventKey="open">Lär mer</Nav.Link>
+          <Nav.Link eventKey="open">Läs mer</Nav.Link>
         </Nav.Item>
       </Nav>
       <BookingDetailsModal
