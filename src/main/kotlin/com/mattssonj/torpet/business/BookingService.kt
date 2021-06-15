@@ -6,6 +6,7 @@ import com.mattssonj.torpet.controller.NoDataFoundException
 import com.mattssonj.torpet.persistence.Booking
 import com.mattssonj.torpet.persistence.BookingRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @Service
@@ -13,9 +14,11 @@ class BookingService(private val bookingRepository: BookingRepository) {
 
     private val today = LocalDate.now()
 
+    @Transactional
     fun getAllUpcomingBookings(): List<Booking> =
         bookingRepository.findAllByStartDateIsAfterOrderByStartDate(today)
 
+    @Transactional
     fun getAllOngoingBookings(): List<Booking> =
         bookingRepository.findAllByStartDateIsBeforeAndEndDateIsAfterOrderByStartDate(today, today) +
                 bookingRepository.findAllByStartDateIsOrderByEndDate(today)
@@ -35,6 +38,7 @@ class BookingService(private val bookingRepository: BookingRepository) {
         return bookingRepository.save(booking)
     }
 
+    @Transactional
     fun update(id: Long, incomingBooking: IncomingBooking, booker: String): Booking {
         verify(incomingBooking)
         val current = findBookingByIdOrThrow(id)
@@ -48,6 +52,7 @@ class BookingService(private val bookingRepository: BookingRepository) {
         return bookingRepository.save(updated)
     }
 
+    @Transactional
     fun delete(bookingId: Long, booker: String) {
         val booking = findBookingByIdOrThrow(bookingId)
         if (booking.booker != booker) throw ForbiddenOperationException("$booker is not allowed to update booking $bookingId")
