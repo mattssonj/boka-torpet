@@ -98,7 +98,8 @@ export default function MyUserInformationForm() {
             </Form.Group>
           </Form>
           <Button
-            variant="primary"
+            className="float-right"
+            variant="success"
             onClick={!isSaving ? saveInformation : null}
             disabled={isSaving}
           >

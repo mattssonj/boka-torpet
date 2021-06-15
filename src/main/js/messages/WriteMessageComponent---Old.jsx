@@ -7,13 +7,17 @@ const initialFormObject = {
   message: "",
 };
 
-export default function NewsModal({ show, hideFunction, newMessage }) {
+export default function WriteMessageComponentOld({
+  show,
+  hideFunction,
+  newMessage,
+}) {
   const [isCreating, setIsCreating] = useState(false);
   const [formValues, setFormValues] = useState(initialFormObject);
 
   const resetForm = () => setFormValues(initialFormObject);
 
-  const createNews = async () => {
+  const createMessage = async () => {
     setIsCreating(true);
     postRequest()
       .then((response) => {
@@ -37,7 +41,7 @@ export default function NewsModal({ show, hideFunction, newMessage }) {
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <Form.Group controlId="bookingName">
+          <Form.Group controlId="message">
             <Form.Label>Meddelande</Form.Label>
             <Form.Control
               type="text"
@@ -55,8 +59,8 @@ export default function NewsModal({ show, hideFunction, newMessage }) {
           Stäng
         </Button>
         <Button
-          variant="primary"
-          onClick={!isCreating ? createNews : null}
+          variant="success"
+          onClick={!isCreating ? createMessage : null}
           disabled={isCreating}
         >
           {isCreating ? "Uppdaterar..." : "Uppdatera"}

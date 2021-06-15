@@ -33,7 +33,7 @@ export default function CreateBooking() {
         </div>
       </Alert>
       <Button
-        variant="outline-primary"
+        variant="primary"
         size="lg"
         block
         onClick={() => setShowModal(true)}

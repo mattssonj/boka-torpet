@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import { Col, Form, Modal } from "react-bootstrap";
 import Axios from "axios";
-import toaster from "./common/Toaster";
+import toaster from "./Toaster";
 
 export default function ChangePasswordComponent({ username }) {
   const [showModal, setShowModal] = useState(false);
@@ -111,7 +111,7 @@ function ChangePasswordForm({ show, hideFunction, changePassword }) {
           Stäng
         </Button>
         <Button
-          variant="primary"
+          variant="success"
           onClick={!isSaving ? updatePassword : null}
           disabled={isSaving}
         >

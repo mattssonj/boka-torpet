@@ -1,16 +1,25 @@
 import React from "react";
 
 import { Col, Container, Row } from "react-bootstrap";
-import Logout from "../Logout";
-import AdminJumbotron from "./AdminJumbotron";
+import Logout from "../sidebar/Logout.jsx";
 import AddUserComponent from "./AddUserComponent";
 import UserListComponent from "./UserListComponent";
 
-export default function Admin() {
+const message =
+  "Här kan man lägga till och ta bort användare. Du kan också hjälpa de användare du har lagt till att byta lösenord.";
+
+export default function AdminComponent() {
   return (
     <Container>
       <Row>
-        <AdminJumbotron />
+        <Col>
+          <h1>Admin Panel</h1>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <p>{message}</p>
+        </Col>
       </Row>
       <Row>
         <AddUserComponent />
@@ -18,11 +27,6 @@ export default function Admin() {
       <br />
       <Row>
         <UserListComponent showAll />
-      </Row>
-      <Row>
-        <Col>
-          <Logout />
-        </Col>
       </Row>
     </Container>
   );

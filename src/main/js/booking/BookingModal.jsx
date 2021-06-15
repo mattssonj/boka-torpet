@@ -107,7 +107,7 @@ export default function BookingModal({ show, hideFunction }) {
           Stäng
         </Button>
         <Button
-          variant="primary"
+          variant="success"
           onClick={!isBooking ? createBooking : null}
           disabled={isBooking}
         >

@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.provisioning.UserDetailsManager
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 const val MIN_PASSWORD_SIZE = 6
 
@@ -19,6 +20,7 @@ class AdminService(
     private val userService: UserService,
 ) {
 
+    @Transactional // Unsure if this is needed
     fun createUser(incomingNewUser: IncomingNewUser, admin: String): NewUser {
         verifyUsername(incomingNewUser.username)
         verifyPassword(incomingNewUser.password)

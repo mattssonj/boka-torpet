@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, Col, Row } from "react-bootstrap";
-import ChangePasswordComponent from "../ChangePasswordComponent";
+import ChangePasswordComponent from "../common/ChangePasswordComponent.jsx";
 
 export default function UserInformationComponent({ userInformation }) {
   return (
