@@ -6,4 +6,4 @@ const exampleMessage = {
   message: lorem,
 };
 
-export { exampleMessage };
+export default exampleMessage;

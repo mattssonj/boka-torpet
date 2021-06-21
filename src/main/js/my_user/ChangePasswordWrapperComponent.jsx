@@ -1,7 +1,7 @@
 import { Col, Container, Row } from "react-bootstrap";
 import ChangePasswordComponent from "../common/ChangePasswordComponent.jsx";
 import React, { useEffect, useState } from "react";
-import backendClient from "../common/BackendClient";
+import backendClient from "../common/clients/BackendClient";
 
 export default function ChangePasswordWrapperComponent() {
   const [loggedInUsername, setLoggedInUsername] = useState("");

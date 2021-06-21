@@ -11,8 +11,6 @@ import com.mattssonj.torpet.security.Roles
 import com.mattssonj.torpet.security.encode
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
-import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.configurers.ChannelSecurityConfigurer
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.provisioning.UserDetailsManager
 import org.springframework.stereotype.Component
@@ -22,6 +20,9 @@ import javax.annotation.PostConstruct
 /**
  * This file is used to generate dev data to test things locally
  */
+
+private const val exampleMessage =
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae tempor ipsum. Proin at eros at turpis euismod bibendum dignissim a metus. Morbi id enim vitae diam ornare condimentum vitae at urna. Donec scelerisque dui quis massa rutrum consectetur. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vitae tempor ipsum. Proin at eros at turpis euismod bibendum dignissim a metus. Morbi id enim vitae diam ornare condimentum vitae at urna. Donec scelerisque dui quis massa rutrum consectetur."
 
 @Component
 @Profile("dev | demo")
@@ -39,8 +40,10 @@ class DevConfiguration(
     }
 
     private fun addMessage() {
-        val message = Message(message = "Torpet är rent och prydligt. Fortsätta hålla det så!", writer = "writer")
-        messageRepository.save(message)
+        (1..10)
+            .toList()
+            .map { Message(message = exampleMessage, writer = "writer") }
+            .also { messageRepository.saveAll(it) }
     }
 
     private fun addBookings() {

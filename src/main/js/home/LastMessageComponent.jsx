@@ -2,15 +2,18 @@ import React, { useEffect, useState } from "react";
 
 import { Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import backendClient from "../common/BackendClient";
 import Message from "../messages/Message";
-import { exampleMessage } from "../common/ExampleData";
+import exampleMessage from "../common/ExampleData";
+import messageClient from "../common/clients/MessageClient";
 
 export default function LastMessageComponent() {
   const [lastMessage, setLastMessage] = useState(exampleMessage);
 
   useEffect(() => {
-    backendClient.getLastMessage().then((message) => setLastMessage(message));
+    messageClient
+      .getLastMessage()
+      .then((message) => setLastMessage(message))
+      .catch((_) => {});
   }, []);
 
   return (

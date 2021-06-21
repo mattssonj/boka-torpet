@@ -3,7 +3,7 @@ import Axios from "axios";
 
 import { Button, Col, Row } from "react-bootstrap";
 import BookingListRow from "./BookingListElement";
-import backendClient from "../common/BackendClient";
+import backendClient from "../common/clients/BackendClient";
 
 const initialShowing = {
   ongoing: [],
