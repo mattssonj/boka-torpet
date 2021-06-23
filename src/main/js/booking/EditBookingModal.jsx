@@ -53,7 +53,7 @@ export default function EditBookingModal({ show, hideFunction, booking }) {
   return (
     <Modal show={show} onHide={hideFunction}>
       <Modal.Header>
-        <Modal.Title>Skapa Bokning</Modal.Title>
+        <Modal.Title>Uppdatera Bokning</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -128,12 +128,12 @@ export default function EditBookingModal({ show, hideFunction, booking }) {
             Stäng
           </Button>
           <Button
-            variant="primary"
+            variant="success"
             className="ml-1"
             onClick={!isBooking ? updateBooking : null}
             disabled={isBooking}
           >
-            {isBooking ? "Uppdaterar..." : "Spara"}
+            {isBooking ? "Uppdaterar..." : "Uppdatera"}
           </Button>
         </div>
       </Modal.Footer>

@@ -3,27 +3,11 @@ import Axios from "axios";
 
 import { Button, Col, Row } from "react-bootstrap";
 import BookingListRow from "./BookingListElement";
-import backendClient from "../common/BackendClient";
+import backendClient from "../common/clients/BackendClient";
 
 const initialShowing = {
   ongoing: [],
   upcoming: [],
-};
-
-const getBookings = (responseHandler) => {
-  Axios.all([
-    Axios.get("/api/bookings?onlyOngoing=true"),
-    Axios.get("/api/bookings?onlyUpcoming=true"),
-  ])
-    .then(
-      Axios.spread((ongoing, upcoming) => {
-        responseHandler({ ongoing: ongoing.data, upcoming: upcoming.data });
-      })
-    )
-    .catch((error) => {
-      console.log(`Error occurred when getting bookings: ${error.response}`);
-      responseHandler(initialShowing);
-    });
 };
 
 export default function Bookings() {
@@ -33,15 +17,18 @@ export default function Bookings() {
   const [loggedInUsername, setLoggedInUsername] = useState(null);
 
   useEffect(() => {
-    getBookings((bookings) => {
-      setBookings(bookings);
-      setShowing(bookings);
-    });
+    backendClient
+      .getBookings()
+      .then((bookings) => {
+        setBookings(bookings);
+        setShowing(bookings);
+      })
+      .catch((_) => {});
     getLoggedInUsername();
   }, []);
 
   const updateBookings = () => {
-    getBookings((bookings) => {
+    backendClient.getBookings().then((bookings) => {
       showAll ? showAllBookings(bookings) : showLoggedInBookings(bookings);
       setBookings(bookings);
     });
@@ -86,12 +73,12 @@ export default function Bookings() {
     <Col>
       <br />
       <Row className="justify-content-md-center">
-        <Col md="auto">
+        <Col xs="auto">
           <Button variant="outline-secondary" onClick={updateBookings}>
             Uppdatera listan
           </Button>
         </Col>
-        <Col md="auto">
+        <Col xs="auto">
           <Button
             variant={!showAll ? "secondary" : "outline-secondary"}
             onClick={() => showLoggedInBookings(null)}
@@ -99,7 +86,7 @@ export default function Bookings() {
             Visa mina
           </Button>
         </Col>
-        <Col md="auto">
+        <Col xs="auto">
           <Button
             variant={showAll ? "secondary" : "outline-secondary"}
             onClick={() => showAllBookings(null)}
