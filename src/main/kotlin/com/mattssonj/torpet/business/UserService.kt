@@ -2,6 +2,7 @@ package com.mattssonj.torpet.business
 
 import com.mattssonj.torpet.controller.ForbiddenOperationException
 import com.mattssonj.torpet.controller.NoDataFoundException
+import com.mattssonj.torpet.event.UserEventProducer
 import com.mattssonj.torpet.persistence.UserInformation
 import com.mattssonj.torpet.persistence.UserInformationRepository
 import org.springframework.stereotype.Service
@@ -21,6 +22,7 @@ class UserService(private val userInformationRepository: UserInformationReposito
     fun createUserInformation(username: String, creator: String) =
         userInformationRepository.save(UserInformation(username, creator))
 
+    @UserEventProducer
     fun updateUserInformation(username: String, userInformation: UserInformation): UserInformation {
         if (!username.equals(userInformation.username, false))
             throw ForbiddenOperationException("$username cannot update UserInformation for ${userInformation.username}")

@@ -3,6 +3,7 @@ package com.mattssonj.torpet.business
 import com.mattssonj.torpet.controller.ForbiddenOperationException
 import com.mattssonj.torpet.controller.IncomingBooking
 import com.mattssonj.torpet.controller.NoDataFoundException
+import com.mattssonj.torpet.event.UserEventProducer
 import com.mattssonj.torpet.persistence.Booking
 import com.mattssonj.torpet.persistence.BookingRepository
 import org.springframework.stereotype.Service
@@ -23,6 +24,7 @@ class BookingService(private val bookingRepository: BookingRepository) {
         bookingRepository.findAllByStartDateIsBeforeAndEndDateIsAfterOrderByStartDate(today, today) +
                 bookingRepository.findAllByStartDateIsOrderByEndDate(today)
 
+    @UserEventProducer
     fun create(incomingBooking: IncomingBooking, booker: String): Booking {
         verify(incomingBooking)
 
@@ -39,6 +41,7 @@ class BookingService(private val bookingRepository: BookingRepository) {
     }
 
     @Transactional
+    @UserEventProducer
     fun update(id: Long, incomingBooking: IncomingBooking, booker: String): Booking {
         verify(incomingBooking)
         val current = findBookingByIdOrThrow(id)
@@ -53,6 +56,7 @@ class BookingService(private val bookingRepository: BookingRepository) {
     }
 
     @Transactional
+    @UserEventProducer
     fun delete(bookingId: Long, booker: String) {
         val booking = findBookingByIdOrThrow(bookingId)
         if (booking.booker != booker) throw ForbiddenOperationException("$booker is not allowed to update booking $bookingId")

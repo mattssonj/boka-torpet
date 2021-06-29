@@ -3,6 +3,7 @@ package com.mattssonj.torpet.business
 import com.mattssonj.torpet.controller.IncomingNewUser
 import com.mattssonj.torpet.controller.OutgoingUser
 import com.mattssonj.torpet.controller.UsernameAlreadyExistsException
+import com.mattssonj.torpet.event.UserEventProducer
 import com.mattssonj.torpet.security.Roles
 import com.mattssonj.torpet.security.encode
 import org.springframework.security.core.userdetails.User
@@ -21,6 +22,7 @@ class AdminService(
 ) {
 
     @Transactional // Unsure if this is needed
+    @UserEventProducer(anonymizeArguments = ["incomingNewUser"])
     fun createUser(incomingNewUser: IncomingNewUser, admin: String): NewUser {
         verifyUsername(incomingNewUser.username)
         verifyPassword(incomingNewUser.password)
@@ -34,6 +36,7 @@ class AdminService(
             .map { OutgoingUser(it.username, it.createdBy, admin.equals(it.createdBy, true)) }
     }
 
+    @UserEventProducer(anonymizeArguments = ["newPassword"])
     fun updatePassword(username: String, newPassword: String) {
         verifyPassword(newPassword)
         getUserDetails(username).let {

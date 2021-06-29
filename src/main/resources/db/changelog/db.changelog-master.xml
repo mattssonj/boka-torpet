@@ -99,10 +99,24 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
         <addAutoIncrement tableName="booking" columnName="id" columnDataType="bigint" startWith="1" incrementBy="1"/>
         <addAutoIncrement tableName="message" columnName="id" columnDataType="bigint" startWith="1" incrementBy="1"/>
+    </changeSet>
 
-        <!--<addAutoIncrement tableName="item" columnName="id" columnDataType="bigint" startWith="1" incrementBy="1"/>
-        <createSequence sequenceName="hibernate_sequence" incrementBy="1" startValue="1"/>
-        <addForeignKeyConstraint baseTableName="item" baseColumnNames="house_id" constraintName="item_house_id_fk"
-                                 referencedTableName="house" referencedColumnNames="id"/>-->
+    <changeSet id="20210701-event-store" author="developer">
+        <createTable tableName="event_store">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="generator" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="json" type="clob">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addAutoIncrement tableName="event_store" columnName="id" columnDataType="bigint" startWith="1" incrementBy="1"/>
     </changeSet>
 </databaseChangeLog>
