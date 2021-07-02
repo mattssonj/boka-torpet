@@ -1,6 +1,7 @@
 package com.mattssonj.torpet.business
 
 import com.mattssonj.torpet.controller.NoDataFoundException
+import com.mattssonj.torpet.event.UserEventProducer
 import com.mattssonj.torpet.persistence.Message
 import com.mattssonj.torpet.persistence.MessageRepository
 import org.springframework.data.domain.Page
@@ -27,6 +28,7 @@ class MessageService(private val messageRepository: MessageRepository) {
         else return page
     }
 
+    @UserEventProducer
     fun create(message: String, writer: String): Message {
         return messageRepository.save(Message(message = message, writer = writer))
     }

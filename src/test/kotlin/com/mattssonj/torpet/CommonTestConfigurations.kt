@@ -1,8 +1,5 @@
 package com.mattssonj.torpet
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.zaxxer.hikari.HikariDataSource
 import io.mockk.mockk
 import org.springframework.boot.test.context.TestConfiguration
@@ -16,9 +13,3 @@ class DataSourceMockConfiguration {
      */
     @Bean fun mockDataSource(): HikariDataSource = mockk(relaxed = true)
 }
-
-val objectMapper: ObjectMapper = ObjectMapper()
-    .registerKotlinModule()
-    .registerModule(JavaTimeModule())
-
-internal fun Any.toJson(): String = objectMapper.writeValueAsString(this)

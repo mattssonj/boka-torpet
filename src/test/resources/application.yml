@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: test
+  datasource:
+    url: jdbc:h2:mem:test;DB_CLOSE_ON_EXIT=FALSE
+  liquibase:
+    change-log: db/changelog/db.changelog-master.xml
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+server:
+  port: ${PORT:8080}

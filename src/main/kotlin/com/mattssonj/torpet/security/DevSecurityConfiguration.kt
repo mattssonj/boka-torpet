@@ -12,7 +12,7 @@ import org.springframework.security.provisioning.UserDetailsManager
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository
 import javax.sql.DataSource
 
-@Profile("dev")
+@Profile("dev | test")
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 class DevSecurityConfiguration(private val datasource: DataSource) : WebSecurityConfigurerAdapter() {
